@@ -11,12 +11,8 @@ const RegisterScreen = () => {
   const navigation = useNavigation<Navigation>();
   const { username, setUsername, email, setEmail, password, setPassword, loading, error, register } = useRegister();
 
-  async function handleRegister() {
-    const success = await register();
-    if (success) {
-      // navigoidaan homeen kunhan valmistuu..
-      console.log("Rekisteröinti onnistui!");
-    }
+  function handleRegister() {
+    register();
   }
 
   return (

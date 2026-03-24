@@ -11,10 +11,8 @@ const LoginScreen = () => {
   const navigation = useNavigation<Navigation>();
   const { email, setEmail, password, setPassword, loading, error, login } = useLogin();
 
-  async function handleLogin() {
-    const success = await login();
-    if (success) {
-    }
+  function handleLogin() {
+    login();
   }
 
   return (

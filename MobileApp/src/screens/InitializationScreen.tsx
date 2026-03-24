@@ -3,11 +3,13 @@ import { StyleSheet, View, Text, Image, Pressable, Platform } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
+import { useAuth } from '../context/AuthContext';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Initialization'>;
 
 const InitializationScreen = () => {
   const navigation = useNavigation<Navigation>();
+  const { continueAsGuest } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -48,6 +50,7 @@ const InitializationScreen = () => {
         </Pressable>
 
         <Pressable
+          onPress={continueAsGuest}
           style={({ pressed }) => [
             styles.textButton,
             pressed && styles.textButtonPressed
