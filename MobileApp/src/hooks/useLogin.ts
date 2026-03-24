@@ -21,20 +21,18 @@ export function useLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function login(): Promise<boolean> {
+  async function login(): Promise<void> {
     if (!email || !password) {
       setError("Täytä kaikki kentät.");
-      return false;
+      return;
     }
 
     try {
       setLoading(true);
       setError("");
       await signInWithEmailAndPassword(auth, email, password);
-      return true;
     } catch (e: any) {
       setError(getErrorMessage(e.code));
-      return false;
     } finally {
       setLoading(false);
     }
