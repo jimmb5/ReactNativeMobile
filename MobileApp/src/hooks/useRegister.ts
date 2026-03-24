@@ -22,10 +22,10 @@ export function useRegister() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function register(): Promise<boolean> {
+  async function register(): Promise<void> {
     if (!username || !email || !password) {
       setError("Täytä kaikki kentät.");
-      return false;
+      return;
     }
 
     try {
@@ -33,27 +33,8 @@ export function useRegister() {
       setError("");
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(user, { displayName: username });
-
-      /*
-      await auth.currentUser?.reload();
-
-      const currentUser = auth.currentUser;
-
-      if (currentUser !== null) {
-        currentUser.providerData.forEach((profile) => {
-          console.log("Sign-in provider: " + profile.providerId);
-          console.log("  Provider-specific UID: " + profile.uid);
-          console.log("  Name: " + profile.displayName);
-          console.log("  Email: " + profile.email);
-          console.log("  Photo URL: " + profile.photoURL);
-        });
-      }
-      */
-
-      return true;
     } catch (e: any) {
       setError(getErrorMessage(e.code));
-      return false;
     } finally {
       setLoading(false);
     }
