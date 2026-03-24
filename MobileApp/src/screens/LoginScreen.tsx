@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
+
+type Navigation = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen = () => {
+  const navigation = useNavigation<Navigation>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -72,7 +78,7 @@ const LoginScreen = () => {
         </View>
 
         <View style={styles.footerContainer}>
-          <Pressable>
+          <Pressable onPress={() => navigation.replace('Register')}>
             <Text style={styles.footerText}>
               Ei vielä käyttäjää? <Text style={styles.boldText}>Rekisteröidy</Text>
             </Text>

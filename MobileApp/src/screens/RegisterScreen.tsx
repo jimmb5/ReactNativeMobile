@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
+
+type Navigation = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 const RegisterScreen = () => {
+  const navigation = useNavigation<Navigation>();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -82,7 +88,7 @@ const RegisterScreen = () => {
         </View>
 
         <View style={styles.footerContainer}>
-          <Pressable>
+          <Pressable onPress={() => navigation.replace('Login')}>
             <Text style={styles.footerText}>
               Oletko jo käyttäjä? <Text style={styles.boldText}>Kirjaudu sisään</Text>
             </Text>

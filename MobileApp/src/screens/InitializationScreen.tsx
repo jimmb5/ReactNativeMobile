@@ -1,7 +1,14 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, Pressable, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
+
+type Navigation = NativeStackNavigationProp<RootStackParamList, 'Initialization'>;
 
 const InitializationScreen = () => {
+  const navigation = useNavigation<Navigation>();
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -19,6 +26,7 @@ const InitializationScreen = () => {
 
       <View style={styles.contentContainer}>
         <Pressable
+          onPress={() => navigation.replace('Login')}
           style={({ pressed }) => [
             styles.button,
             styles.buttonPrimary, // tämä määrittelee vain napin värin
@@ -29,6 +37,7 @@ const InitializationScreen = () => {
         </Pressable>
 
         <Pressable
+          onPress={() => navigation.replace('Register')}
           style={({ pressed }) => [
             styles.button,
             styles.buttonSecondary,
