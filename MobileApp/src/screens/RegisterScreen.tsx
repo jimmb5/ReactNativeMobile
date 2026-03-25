@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
+import { useRegister } from '../hooks/useRegister';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 const RegisterScreen = () => {
   const navigation = useNavigation<Navigation>();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { username, setUsername, email, setEmail, password, setPassword, loading, error, register } = useRegister();
+
+  function handleRegister() {
+    register();
+  }
 
   return (
     <KeyboardAvoidingView
@@ -53,17 +56,21 @@ const RegisterScreen = () => {
             onChangeText={setPassword}
           />
 
-          <Pressable style={styles.forgotPasswordButton}>
-            <Text style={styles.forgotPasswordText}>Unohtuiko salasana?</Text>
-          </Pressable>
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
           <Pressable
+            onPress={handleRegister}
+            disabled={loading}
             style={({ pressed }) => [
               styles.button,
-              pressed && styles.buttonPressed
+              pressed && styles.buttonPressed,
+              loading && styles.buttonDisabled,
             ]}
           >
-            <Text style={styles.buttonText}>Rekisteröidy</Text>
+            {loading
+              ? <ActivityIndicator color="#000" />
+              : <Text style={styles.buttonText}>Rekisteröidy</Text>
+            }
           </Pressable>
         </View>
 
@@ -143,13 +150,13 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  forgotPasswordButton: {
-    alignSelf: 'flex-end',
-    paddingVertical: 4,
-  },
-  forgotPasswordText: {
-    color: '#000000',
+  errorText: {
+    color: '#CC0000',
     fontSize: 14,
+    textAlign: 'center',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
   button: {
     width: '100%',

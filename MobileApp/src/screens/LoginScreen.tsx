@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
+import { useLogin } from '../hooks/useLogin';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen = () => {
   const navigation = useNavigation<Navigation>();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { email, setEmail, password, setPassword, loading, error, login } = useLogin();
+
+  function handleLogin() {
+    login();
+  }
 
   return (
     <KeyboardAvoidingView
@@ -28,11 +32,12 @@ const LoginScreen = () => {
         <View style={styles.formContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Käyttäjänimi"
+            placeholder="Sähköpostiosoite"
             placeholderTextColor="#666"
-            value={username}
-            onChangeText={setUsername}
+            value={email}
+            onChangeText={setEmail}
             autoCapitalize="none"
+            keyboardType="email-address"
           />
           <TextInput
             style={styles.input}
@@ -47,13 +52,21 @@ const LoginScreen = () => {
             <Text style={styles.forgotPasswordText}>Unohtuiko salasana?</Text>
           </Pressable>
 
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
           <Pressable
+            onPress={handleLogin}
+            disabled={loading}
             style={({ pressed }) => [
               styles.button,
-              pressed && styles.buttonPressed
+              pressed && styles.buttonPressed,
+              loading && styles.buttonDisabled,
             ]}
           >
-            <Text style={styles.buttonText}>Kirjaudu sisään</Text>
+            {loading
+              ? <ActivityIndicator color="#000" />
+              : <Text style={styles.buttonText}>Kirjaudu sisään</Text>
+            }
           </Pressable>
         </View>
 
@@ -140,6 +153,14 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: '#000000',
     fontSize: 14,
+  },
+  errorText: {
+    color: '#CC0000',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
   button: {
     width: '100%',
