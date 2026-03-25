@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   Explore: undefined;
+  Map: undefined;
 };
 
 // tänne screenien määrittelyt. 
