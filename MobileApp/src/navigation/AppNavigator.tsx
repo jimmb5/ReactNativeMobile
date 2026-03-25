@@ -3,19 +3,20 @@ import { View, ActivityIndicator } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './navTypes';
 import { useAuth } from '../context/AuthContext';
+
 import InitializationScreen from '../screens/InitializationScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import ExploreScreen from '../screens/ExploreScreen';
-import MapScreen from '../screens/MapScreen';
+
+// BottomNavigation yksittäisten ikkunoiden sijaan
+import BottomNavigation from './BottomNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
   const { user, isGuest, loading } = useAuth();
 
-
-  // tämä on vain lataus indikaattori 
+  // tämä on vain lataus indikaattori
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -27,10 +28,8 @@ const AppNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user || isGuest ? (
-        <>
-        {/* <Stack.Screen name="Explore" component={ExploreScreen} /> */}
-        <Stack.Screen name="Map" component={MapScreen} />
-        </>
+        // BottomNavigation yksittäisten ikkunoiden sijaan
+        <Stack.Screen name="MainApp" component={BottomNavigation} />
       ) : (
         <>
           <Stack.Screen name="Initialization" component={InitializationScreen} />
