@@ -1,20 +1,50 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import MapView, { Marker, Region } from "react-native-maps";
 
-const Map = () => {
-    return(
-        <MapView style={styles.map}/>
-    );
+interface MapProps {
+  region: Region;
+  heading?: number;
+}
+
+const Map = ({ region, heading }: MapProps) => {
+  return (
+    <MapView
+      style={styles.map}
+      region={region}
+      camera={
+        heading !== undefined
+          ? {
+              center: {
+                latitude: region.latitude,
+                longitude: region.longitude,
+              },
+              pitch: 0,
+              heading: heading,
+              zoom: 15,
+            }
+          : undefined
+      }
+    >
+      <Marker
+        coordinate={{
+          latitude: region.latitude,
+          longitude: region.longitude,
+        }}
+        title="Your Location"
+        description="You are here"
+        pinColor="red"
+      />
+    </MapView>
+  );
 };
 
 const styles = StyleSheet.create({
-map: {
-flex: 1,
-backgroundColor: '#fff',
-alignItems: 'center',
-justifyContent: 'center',
-},
+  map: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
 });
 
 export default Map;
