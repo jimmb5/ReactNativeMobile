@@ -18,5 +18,3 @@ justifyContent: 'center',
 });
 
 export default Map;
-
-
