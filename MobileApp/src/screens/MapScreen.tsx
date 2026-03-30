@@ -2,6 +2,7 @@ import { View, Text } from "react-native"
 import React, { useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import SearchBar from "../components/SearchBar"
+import ListSheet from "../components/ListSheet"
 
 const MapScreen = () => {
   const [searchQuery, setSearchQuery] = useState<string>("")
@@ -16,6 +17,7 @@ const MapScreen = () => {
             console.log("Avaa suodatus bottom sheet")
           }}
         />
+        <ListSheet />
       </View>
     </SafeAreaView>
   )
