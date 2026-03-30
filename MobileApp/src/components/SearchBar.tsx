@@ -7,11 +7,18 @@ type Props = {
   onChange: (text: string) => void
   placeholder: string
   onFilterPress: () => void
+  style?: any
 }
 
-const SearchBar = ({ value, onChange, placeholder, onFilterPress }: Props) => {
+const SearchBar = ({
+  value,
+  onChange,
+  placeholder,
+  onFilterPress,
+  style,
+}: Props) => {
   return (
-    <View>
+    <View style={style}>
       <Searchbar
         placeholder={placeholder}
         value={value}
