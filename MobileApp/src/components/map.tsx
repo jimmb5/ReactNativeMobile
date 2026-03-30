@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
+import React, { useState } from "react"
+import { StyleSheet, Text, TouchableOpacity } from "react-native"
+import MapView, { Marker, Region } from "react-native-maps"
 
 interface MapProps {
-  region: Region;
-  heading?: number;
+  region: Region
+  heading?: number
 }
 
 const Map = ({ region, heading }: MapProps) => {
   return (
     <MapView
-      style={styles.map}
+      style={StyleSheet.absoluteFillObject}
       region={region}
       camera={
         heading !== undefined
@@ -36,8 +36,8 @@ const Map = ({ region, heading }: MapProps) => {
         pinColor="red"
       />
     </MapView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   map: {
@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-});
+})
 
-export default Map;
+export default Map
