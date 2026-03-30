@@ -4,6 +4,8 @@ export type RootStackParamList = {
   Register: undefined;
   Explore: undefined;
   Map: undefined;
+  MainApp: undefined;
+  AddPlace: undefined;
 };
 
 // tänne screenien määrittelyt. 
