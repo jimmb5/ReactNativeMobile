@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ExploreScreen from '../screens/ExploreScreen';
 import MapScreen from '../screens/MapScreen';
 import AddPlaceScreen from '../screens/AddPlaceScreen';
+// AddPlaceScreen bottom navissa testausta varten, muutetaan myöhemmin
 
 const Tab = createBottomTabNavigator();
 
