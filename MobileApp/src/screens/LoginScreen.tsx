@@ -50,7 +50,10 @@ const LoginScreen = () => {
             onChangeText={setPassword}
           />
 
-          <Pressable style={styles.forgotPasswordButton}>
+          <Pressable
+            style={styles.forgotPasswordButton}
+            onPress={() => navigation.navigate('ForgotPassword')}
+          >
             <Text style={styles.forgotPasswordText}>Unohtuiko salasana?</Text>
           </Pressable>
 
