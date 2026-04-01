@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TextInput, Pressable, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
@@ -16,10 +17,11 @@ const LoginScreen = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
           <Image
@@ -98,22 +100,25 @@ const LoginScreen = () => {
           </Pressable>
         </View>
       </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#FBFBEF',
+  },
+  container: {
+    flex: 1,
   },
   innerContainer: {
     flex: 1,
     paddingHorizontal: 32,
     marginTop: '55%',
-    paddingBottom: 40,
   },
   logoContainer: {
     alignItems: 'center',
