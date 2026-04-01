@@ -2,6 +2,7 @@ export type RootStackParamList = {
   Initialization: undefined;
   Login: undefined;
   Register: undefined;
+  ForgotPassword: undefined;
   Explore: undefined;
   Map: undefined;
   MainApp: undefined;
