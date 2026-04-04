@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import InitializationScreen from '../screens/InitializationScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 // BottomNavigation yksittäisten ikkunoiden sijaan
 import BottomNavigation from './BottomNavigation';
@@ -35,6 +36,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Initialization" component={InitializationScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         </>
       )}
     </Stack.Navigator>
