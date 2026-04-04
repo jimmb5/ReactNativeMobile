@@ -3,17 +3,28 @@ import { Text, TextInput, StyleSheet, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
 
 const screenWidth = Dimensions.get('window').width;
 const padding = 16;
 const numColumns = 4;
 const imageSize = (screenWidth - padding * 2) / numColumns;
-const CATEGORIES = ['Leikkipuisto', 'Koirapuisto', 'Nuotiopaikka', 'Reitti', 'Uimapaikka'];
+const CATEGORIES = ['Leikkipuisto', 'Koirapuisto', 'Nuotiopaikka', 'Reitti', 'Uimapaikka', 'Laavu'];
+
 const AddPlaceScreen = () => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [type, setType] = useState<string>('');
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const [location, setLocation] = useState<{
+  latitude: number;
+  longitude: number;
+} | null>(null);
+
   const pickImage = async () => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (status !== 'granted') {
@@ -35,10 +46,8 @@ const removeImage = (index: number) => {
 };
 const toggleCategory = (catg: string) => {
   if (type === catg) {
-    // jos sama kategoria painetaan uudelleen, poistetaan valinta
     setType('');
   } else {
-    // muuten asetetaan uusi kategoria
     setType(catg);
   }
 };
@@ -58,6 +67,21 @@ const toggleCategory = (catg: string) => {
           value={name}
           onChangeText={setName}
         />
+        <Text style={styles.label}>Sijainti</Text>
+<TouchableOpacity
+  style={styles.addImageButton}
+  onPress={() => navigation.navigate('LocationSelect', {
+    onLocationSelected: (lat, lng) => {
+      setLocation({ latitude: lat, longitude: lng });
+    }
+  })}
+>
+  <Text>
+    {location
+      ? `📍 ${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
+      : 'Valitse sijainti kartalta'}
+  </Text>
+</TouchableOpacity>
         <Text style={styles.label}>Kategoriat</Text>
 <View style={styles.categoriesContainer}>
   {CATEGORIES.map(catg => {
@@ -100,12 +124,6 @@ const toggleCategory = (catg: string) => {
     </SafeAreaView> 
   );
 };
-// TODO: teksti paikan nimelle
-// TODO: teksti kuvaukselle
-// TODO: lisää kuvan valitsin ja näytä lisäämät kuvat
-// TODO: lisää kategorian valinta
-// TODO: lisää sijainnin valinta
-// TODO: lisää tallennus nappi
 // TODO: tallenna tiedot db
 // TODO: tallenna kuvat db
 

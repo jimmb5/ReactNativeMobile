@@ -1,12 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
+import LocationSelectScreen from '../screens/LocationSelectScreen';
 
 import ExploreScreen from '../screens/ExploreScreen';
 import MapScreen from '../screens/MapScreen';
 import AddPlaceScreen from '../screens/AddPlaceScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const BottomNavigation = () => {
   return (
@@ -33,4 +37,13 @@ const BottomNavigation = () => {
   );
 };
 
-export default BottomNavigation;
+const StackNavigation = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MainApp" component={BottomNavigation} />
+      <Stack.Screen name="LocationSelect" component={LocationSelectScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export default StackNavigation;
