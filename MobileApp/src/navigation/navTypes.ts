@@ -7,6 +7,9 @@ export type RootStackParamList = {
   Map: undefined;
   MainApp: undefined;
   AddPlace: undefined;
+  LocationSelect: {
+    onLocationSelected: (latitude: number, longitude: number) => void;
+  };
 };
 
 // tänne screenien määrittelyt. 

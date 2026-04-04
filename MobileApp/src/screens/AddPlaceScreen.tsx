@@ -13,7 +13,7 @@ const AddPlaceScreen = () => {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [images, setImages] = useState<string[]>([]);
-  const [Category, setCategory] = useState<string[]>([]);
+  const [type, setType] = useState<string>('');
   const pickImage = async () => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (status !== 'granted') {
@@ -34,12 +34,12 @@ const removeImage = (index: number) => {
   setImages(images.filter((_, i) => i !== index));
 };
 const toggleCategory = (catg: string) => {
-  if (Category.includes(catg)) {
-    // jos kategoria on jo valittu, poistetaan se
-    setCategory(Category.filter(c => c !== catg));
+  if (type === catg) {
+    // jos sama kategoria painetaan uudelleen, poistetaan valinta
+    setType('');
   } else {
-    // muuten lisätään se listaan
-    setCategory([...Category, catg]);
+    // muuten asetetaan uusi kategoria
+    setType(catg);
   }
 };
 
@@ -61,7 +61,7 @@ const toggleCategory = (catg: string) => {
         <Text style={styles.label}>Kategoriat</Text>
 <View style={styles.categoriesContainer}>
   {CATEGORIES.map(catg => {
-    const isSelected = Category.includes(catg);
+    const isSelected = type === catg;
     return (
       <TouchableOpacity
         key={catg}
@@ -145,15 +145,15 @@ image: {
   padding: 2,
 },
 categoriesContainer: {
-  flexDirection: 'row', // chipit vierekkäin
-  flexWrap: 'wrap',     // rivittyy jos ei mahdu
+  flexDirection: 'row',
+  flexWrap: 'wrap',
   marginBottom: 16,
-  gap: 8,               // väli chippien välillä
+  gap: 8,
 },
 chip: {
   borderWidth: 1,
   borderColor: 'gray',
-  borderRadius: 16,     // pyöreät reunat
+  borderRadius: 16,
   paddingHorizontal: 12,
   paddingVertical: 6,
 },
