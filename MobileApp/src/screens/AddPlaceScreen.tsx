@@ -6,6 +6,10 @@ import { Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
+import { useAuth } from '../context/AuthContext';
+import { collection, addDoc } from 'firebase/firestore';
+import { db, storage } from '../../services/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const screenWidth = Dimensions.get('window').width;
 const padding = 16;
@@ -19,6 +23,7 @@ const AddPlaceScreen = () => {
   const [images, setImages] = useState<string[]>([]);
   const [type, setType] = useState<string>('');
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { user } = useAuth();
 
   const [location, setLocation] = useState<{
   latitude: number;
@@ -52,6 +57,52 @@ const toggleCategory = (catg: string) => {
   }
 };
 
+const handleSave = async () => {
+  if (!name || !location || !type) {
+    alert('Täytä nimi, sijainti ja kategoria');
+    return;
+  }
+
+  try {
+    const imageUrls = await uploadImages();
+
+    const docRef = await addDoc(collection(db, 'places'), {
+      name,
+      type,
+      description: desc,
+      location,
+      tags: [],
+      distance: '',
+      imageUrls,
+      createdBy: user?.uid ?? 'guest',
+    });
+    console.log('Tallennettu ID:llä:', docRef.id);
+    alert('Paikka lisätty!');
+  } catch (error) {
+    console.error('Virhe:', error);
+    alert('Tallennus epäonnistui');
+  }
+};
+
+const uploadImages = async (): Promise<string[]> => {
+  const urls: string[] = [];
+
+  for (const uri of images) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const filename = `places/${user?.uid}/${Date.now()}.jpg`;
+    const storageRef = ref(storage, filename);
+
+    await uploadBytes(storageRef, blob);
+
+    const url = await getDownloadURL(storageRef);
+    urls.push(url);
+  }
+
+  return urls;
+};
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -67,6 +118,8 @@ const toggleCategory = (catg: string) => {
           value={name}
           onChangeText={setName}
         />
+
+
         <Text style={styles.label}>Sijainti</Text>
 <TouchableOpacity
   style={styles.addImageButton}
@@ -76,6 +129,8 @@ const toggleCategory = (catg: string) => {
     }
   })}
 >
+
+
   <Text>
     {location
       ? `📍 ${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
@@ -98,6 +153,8 @@ const toggleCategory = (catg: string) => {
       </TouchableOpacity>
     );
   })}
+
+
 </View>
         <Text style={styles.label}>Paikan kuvaus</Text>
         <TextInput
@@ -107,6 +164,8 @@ const toggleCategory = (catg: string) => {
           onChangeText={setDesc}
           multiline
         />
+
+
         <Text style={styles.label}>Kuvat</Text>
 <TouchableOpacity style={styles.addImageButton} onPress={pickImage}>
   <Text>LISÄÄ KUVIA</Text>
@@ -118,14 +177,18 @@ const toggleCategory = (catg: string) => {
     <Image source={{ uri: item }} style={styles.image} />
   </TouchableOpacity>
 )}
+ListFooterComponent={
+  <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+    <Text style={styles.saveButtonText}>Tallenna paikka</Text>
+  </TouchableOpacity>
+}
 />
 
       
     </SafeAreaView> 
   );
 };
-// TODO: tallenna tiedot db
-// TODO: tallenna kuvat db
+
 
 export default AddPlaceScreen;
 
@@ -184,5 +247,17 @@ chipText: {
 },
 chipTextSelect: {
   color: 'white',
+},
+saveButton: {
+  backgroundColor: '#2f95dc',
+  padding: 16,
+  borderRadius: 8,
+  alignItems: 'center',
+  marginTop: 16,
+},
+saveButtonText: {
+  color: 'white',
+  fontSize: 16,
+  fontWeight: 'bold',
 },
 });

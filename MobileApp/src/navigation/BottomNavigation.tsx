@@ -9,6 +9,7 @@ import ExploreScreen from '../screens/ExploreScreen';
 import MapScreen from '../screens/MapScreen';
 import AddPlaceScreen from '../screens/AddPlaceScreen';
 
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,7 +23,6 @@ const BottomNavigation = () => {
 
           if (route.name === 'Explore') iconName = 'compass';
           else if (route.name === 'Map') iconName = 'map';
-          else if (route.name === 'AddPlace') iconName = 'add-circle';
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -32,7 +32,6 @@ const BottomNavigation = () => {
     >
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="AddPlace" component={AddPlaceScreen} />
     </Tab.Navigator>
   );
 };
@@ -41,6 +40,7 @@ const StackNavigation = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MainApp" component={BottomNavigation} />
+      <Stack.Screen name="AddPlace" component={AddPlaceScreen} />
       <Stack.Screen name="LocationSelect" component={LocationSelectScreen} />
     </Stack.Navigator>
   );

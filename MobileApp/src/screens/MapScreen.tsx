@@ -1,4 +1,4 @@
-import { Text, View } from "react-native"
+import { Text, View, TouchableOpacity } from "react-native"
 import React from "react"
 import { useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -9,8 +9,14 @@ import { StyleSheet } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { Region } from "react-native-maps"
 import * as Location from "expo-location"
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
+
+
 
 const MapScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [location, setLocation] = useState<Region>({
     latitude: 65.08,
     longitude: 25.48,
@@ -77,6 +83,7 @@ const MapScreen = () => {
       <Map region={location} heading={heading} />
       <StatusBar style="auto" />
       <View style={styles.content}>
+        
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
@@ -91,6 +98,12 @@ const MapScreen = () => {
             right: 16,
           }}
         />
+        <TouchableOpacity
+  style={styles.addButton}
+  onPress={() => navigation.navigate('AddPlace')}
+>
+  <Text style={styles.addButtonText}>+ Lisää paikka</Text>
+</TouchableOpacity>
         <ListSheet />
       </View>
     </View>
@@ -106,4 +119,17 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  addButton: {
+  position: 'absolute',
+  bottom: 200,
+  right: 16,
+  backgroundColor: '#2f95dc',
+  borderRadius: 24,
+  paddingHorizontal: 16,
+  paddingVertical: 10,
+},
+addButtonText: {
+  color: 'white',
+  fontWeight: 'bold',
+},
 })
