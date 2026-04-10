@@ -29,6 +29,9 @@ const BottomNavigation = () => {
         },
         tabBarActiveTintColor: '#2f95dc',
         tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: "#fcfcf5",
+        },
       })}
     >
       <Tab.Screen name="Explore" component={ExploreScreen} />
