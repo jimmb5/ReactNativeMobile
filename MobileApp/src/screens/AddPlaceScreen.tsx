@@ -1,107 +1,32 @@
-import React, { useState } from 'react';
-import { Text, TextInput, StyleSheet, View, ScrollView } from 'react-native';
+import React from 'react';
+import { Text, TextInput, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
 import { Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
-import { useAuth } from '../context/AuthContext';
-import { collection, addDoc } from 'firebase/firestore';
-import { db, storage } from '../../services/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useAddPlace, CATEGORIES } from '../hooks/useAddPlace';
+import Slider from '@react-native-community/slider';
 
 const screenWidth = Dimensions.get('window').width;
 const padding = 16;
 const numColumns = 4;
 const imageSize = (screenWidth - padding * 2) / numColumns;
-const CATEGORIES = ['Leikkipuisto', 'Koirapuisto', 'Nuotiopaikka', 'Reitti', 'Uimapaikka', 'Laavu'];
 
 const AddPlaceScreen = () => {
-  const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [images, setImages] = useState<string[]>([]);
-  const [type, setType] = useState<string>('');
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { user } = useAuth();
-
-  const [location, setLocation] = useState<{
-  latitude: number;
-  longitude: number;
-} | null>(null);
-
-  const pickImage = async () => {
-  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (status !== 'granted') {
-    alert('Tarvitaan lupa galleriaan');
-    return;
-  }
-  const result = await ImagePicker.launchImageLibraryAsync({
-    allowsMultipleSelection: true, 
-    mediaTypes: ['images'],
-  });
-
-  if (!result.canceled) {
-    const uris = result.assets.map(asset => asset.uri);
-    setImages([...images, ...uris]);
-  }
-};
-const removeImage = (index: number) => {
-  setImages(images.filter((_, i) => i !== index));
-};
-const toggleCategory = (catg: string) => {
-  if (type === catg) {
-    setType('');
-  } else {
-    setType(catg);
-  }
-};
-
-const handleSave = async () => {
-  if (!name || !location || !type) {
-    alert('Täytä nimi, sijainti ja kategoria');
-    return;
-  }
-
-  try {
-    const imageUrls = await uploadImages();
-
-    const docRef = await addDoc(collection(db, 'places'), {
-      name,
-      type,
-      description: desc,
-      location,
-      tags: [],
-      distance: '',
-      imageUrls,
-      createdBy: user?.uid ?? 'guest',
-    });
-    console.log('Tallennettu ID:llä:', docRef.id);
-    alert('Paikka lisätty!');
-  } catch (error) {
-    console.error('Virhe:', error);
-    alert('Tallennus epäonnistui');
-  }
-};
-
-const uploadImages = async (): Promise<string[]> => {
-  const urls: string[] = [];
-
-  for (const uri of images) {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-
-    const filename = `places/${user?.uid}/${Date.now()}.jpg`;
-    const storageRef = ref(storage, filename);
-
-    await uploadBytes(storageRef, blob);
-
-    const url = await getDownloadURL(storageRef);
-    urls.push(url);
-  }
-
-  return urls;
-};
+  const {
+    name, setName,
+    desc, setDesc,
+    images,
+    type,
+    location, setLocation,
+    length, setLength,
+    pickImage,
+    removeImage,
+    toggleCategory,
+    handleSave,
+  } = useAddPlace();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,10 +61,14 @@ const uploadImages = async (): Promise<string[]> => {
       ? `📍 ${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
       : 'Valitse sijainti kartalta'}
   </Text>
+
+   
+
+
 </TouchableOpacity>
         <Text style={styles.label}>Kategoriat</Text>
 <View style={styles.categoriesContainer}>
-  {CATEGORIES.map(catg => {
+  {CATEGORIES.map((catg: string) => {
     const isSelected = type === catg;
     return (
       <TouchableOpacity
@@ -154,6 +83,21 @@ const uploadImages = async (): Promise<string[]> => {
     );
   })}
 
+<Text style={styles.label}>
+  Reitin pituus: {length === 0 ? 'Ei reittiä' 
+  : length === 5000 ? '5000 m +' 
+  : `${length} m`}
+</Text>
+<Slider
+  style={styles.slider}
+  minimumValue={0}
+  maximumValue={5000}
+  step={50}
+  value={length}
+  onValueChange={setLength}
+  minimumTrackTintColor="#2f95dc"
+  maximumTrackTintColor="gray"
+/>
 
 </View>
         <Text style={styles.label}>Paikan kuvaus</Text>
@@ -259,5 +203,10 @@ saveButtonText: {
   color: 'white',
   fontSize: 16,
   fontWeight: 'bold',
+},
+slider: {
+  width: '100%',
+  height: 40,
+  marginBottom: 16,
 },
 });
