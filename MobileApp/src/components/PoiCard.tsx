@@ -1,19 +1,10 @@
 import { View, StyleSheet } from "react-native"
 import React from "react"
 import { Avatar, Card, Chip, Text } from "react-native-paper"
-
-type Poi = {
-  id: string
-  name: string
-  type: string
-  description: string
-  distance: string
-  length?: number
-  tags: string[]
-}
+import { Place } from "../types/place"
 
 type Props = {
-  poi: Poi
+  poi: Place
   onPress: () => void
 }
 

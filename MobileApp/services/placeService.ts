@@ -1,6 +1,6 @@
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "./firebase"
-import { Place } from "../src/data/Place"
+import { Place } from "../src/types/place"
 
 export const getAllPlaces = async (): Promise<Place[]> => {
   try {

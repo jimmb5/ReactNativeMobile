@@ -5,225 +5,15 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import PoiCard from "./PoiCard"
+import { Place } from "../types/place"
+import { ActivityIndicator } from "react-native"
 
-type Poi = {
-  id: string
-  name: string
-  type: string
-  description: string
-  distance: string
-  length?: number
-  tags: string[]
+type Props = {
+  places: Place[]
+  isLoading: boolean
 }
 
-// Mock dataa
-const pois: Poi[] = [
-  {
-    id: "1",
-    name: "Nallikari",
-    type: "Uimapaikka",
-    description: "Suosittu uimapaikka ja ranta Oulussa",
-    distance: "2.3",
-    tags: ["hiekkaranta", "aurinko", "kesä", "lapsiystävällinen", "penkit"],
-  },
-  {
-    id: "2",
-    name: "Hupisaaret",
-    type: "Reitti",
-    description: "Puistomainen ulkoilualue keskellä kaupunkia",
-    distance: "1.1",
-    length: 1.2,
-    tags: ["helppo", "lapsiystävällinen", "penkit", "aurinko", "esteetön"],
-  },
-  {
-    id: "3",
-    name: "Kaijonharjun lenkki",
-    type: "Reitti",
-    description: "Keskipitkä ulkoilureitti metsässä",
-    distance: "3.6",
-    length: 3.5,
-    tags: [
-      "ulkoilureitti",
-      "metsä",
-      "keskipitkä reitti",
-      "patikointi",
-      "koirien kanssa",
-    ],
-  },
-  {
-    id: "4",
-    name: "Myllytulli",
-    type: "Leikkipuisto",
-    description: "Leikkipuisto palveluineen keskustassa",
-    distance: "1.8",
-    tags: [
-      "liukumäet",
-      "aktiviteettivälineet",
-      "lapsiystävällinen",
-      "aurinko",
-      "penkit",
-    ],
-  },
-  {
-    id: "5",
-    name: "Riutunkari",
-    type: "Uimapaikka",
-    description: "Ranta luonnonkauniilla hiekkakivikkoalueella",
-    distance: "4.9",
-    tags: ["kivikkoranta", "aurinko", "kesä", "sadevaraus", "niitty"],
-  },
-  {
-    id: "6",
-    name: "Värttö",
-    type: "Nuotiopaikka",
-    description: "Metsäinen nuotiopaikka ja tulentekopaikka",
-    distance: "3.2",
-    tags: ["nuotiopaikka", "tulisija", "metsä", "grilli", "polttopuut"],
-  },
-  {
-    id: "7",
-    name: "Metsokangas",
-    type: "Reitti",
-    description: "Laaja ulkoilualue polkuineen ja laavuineen",
-    distance: "5.4",
-    length: 5.6,
-    tags: ["ulkoilureitti", "metsä", "pitkä reitti", "helppo", "näköalapaikka"],
-  },
-  {
-    id: "8",
-    name: "Hietasaari",
-    type: "Uimapaikka",
-    description: "Pitkä hiekkaranta ja virkistysalue",
-    distance: "6.2",
-    tags: ["hiekkaranta", "aurinko", "kesä", "penkit", "vesipiste"],
-  },
-  {
-    id: "9",
-    name: "Toppilansalmi",
-    type: "Reitti",
-    description: "Joenrantareitti ulkoiluun ja pyöräilyyn",
-    distance: "2.9",
-    length: 3.0,
-    tags: ["patikointi", "pyöräily", "esteetön pääsy", "vesipiste", "aurinko"],
-  },
-  {
-    id: "10",
-    name: "Kaakkuri",
-    type: "Leikkipuisto",
-    description: "Lapsiystävällinen leikkipuisto lähellä asutusta",
-    distance: "3.1",
-    tags: [
-      "aktiviteettivälineet",
-      "liukumäet",
-      "lapsiystävällinen",
-      "penkit",
-      "varjo",
-    ],
-  },
-  {
-    id: "11",
-    name: "Viitostie lenkki",
-    type: "Reitti",
-    description: "Keskipitkä metsäpolku lenkille",
-    distance: "4.5",
-    length: 4.7,
-    tags: [
-      "metsä",
-      "keskipitkä reitti",
-      "patikointi",
-      "koirien kanssa",
-      "helppo",
-    ],
-  },
-  {
-    id: "12",
-    name: "Pateniemen ranta",
-    type: "Uimapaikka",
-    description: "Laidunalueiden ja rannan yhdistelmä",
-    distance: "7.8",
-    tags: ["hiekkaranta", "niitty", "kalastus", "aurinko", "kesä"],
-  },
-  {
-    id: "13",
-    name: "Laanila",
-    type: "Reitti",
-    description: "Meluisaa metsäreittiä ja pururataa",
-    distance: "5.9",
-    length: 6.0,
-    tags: [
-      "metsä",
-      "ulkoilureitti",
-      "keskitaso",
-      "patikointi",
-      "koirien kanssa",
-    ],
-  },
-  {
-    id: "14",
-    name: "Tuiran uimaranta",
-    type: "Uimapaikka",
-    description: "Ranta joen varrella kaupungissa",
-    distance: "1.5",
-    tags: ["vesipiste", "aurinko", "kesä", "sadevaraus", "penkit"],
-  },
-  {
-    id: "15",
-    name: "Juurikkaniemi",
-    type: "Laavu",
-    description: "Erämainen laavu ja levähdyspaikka",
-    distance: "9.0",
-    tags: ["laavu", "metsä", "tulen teko", "puuvaja", "polttopuut"],
-  },
-  {
-    id: "16",
-    name: "Riistavesi uimaranta",
-    type: "Uimapaikka",
-    description: "Rauhallinen järviranta",
-    distance: "12.4",
-    tags: ["järvi", "hiekkaranta", "näköalapaikka", "kesä", "penkit"],
-  },
-  {
-    id: "17",
-    name: "Haukiputaan puisto",
-    type: "Leikkipuisto",
-    description: "Puistikko lapsille ja perheille",
-    distance: "8.3",
-    tags: [
-      "lapsiystävällinen",
-      "penkit",
-      "varjo",
-      "aktiviteettivälineet",
-      "sadevaraus",
-    ],
-  },
-  {
-    id: "18",
-    name: "Oulujoen ranta",
-    type: "Reitti",
-    description: "Joen viertä kulkeva kulkureitti",
-    distance: "3.7",
-    length: 3.8,
-    tags: ["patikointi", "pyöräily", "esteetön pääsy", "vesipiste", "aurinko"],
-  },
-  {
-    id: "19",
-    name: "Pikku‑Rönni",
-    type: "Nuotiopaikka",
-    description: "Pieni tulentekopaikka metsän reunassa",
-    distance: "6.6",
-    tags: ["nuotiopaikka", "tulisija", "grilli", "metsä", "penkit"],
-  },
-  {
-    id: "20",
-    name: "Heinäpään uimaranta",
-    type: "Uimapaikka",
-    description: "Helppo ja suosittu järviranta",
-    distance: "4.8",
-    tags: ["hiekkaranta", "aurinko", "lapsiystävällinen", "vesipiste", "kesä"],
-  },
-]
-
-const ListSheet = () => {
+const ListSheet = ({ places, isLoading }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
 
   const snapPoints = ["25%", "60%", "100%"]
@@ -236,25 +26,33 @@ const ListSheet = () => {
     console.log("Pressed poi:", poiId)
   }
 
-  const renderItem: ListRenderItem<Poi> = useCallback(
+  const renderItem: ListRenderItem<Place> = useCallback(
     ({ item }) => (
       <PoiCard poi={item} onPress={() => handlePoiPress(item.id)} />
     ),
     [],
   )
-
   return (
     <BottomSheet
       ref={bottomSheetRef}
       onChange={handleSheetChanges}
       snapPoints={snapPoints}
     >
-      <BottomSheetFlatList
-        data={pois}
-        keyExtractor={(item: Poi) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
-      />
+      <BottomSheetView style={styles.container}>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+            <Text>Ladataan...</Text>
+          </View>
+        ) : (
+          <BottomSheetFlatList
+            data={places}
+            keyExtractor={(item: Place) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContent}
+          />
+        )}
+      </BottomSheetView>
     </BottomSheet>
   )
 }
@@ -262,11 +60,15 @@ const ListSheet = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "grey",
   },
   listContent: {
     padding: 12,
     gap: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
 
