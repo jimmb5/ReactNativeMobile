@@ -1,6 +1,7 @@
 import React, { useMemo } from "react"
 import { View, StyleSheet, Text, ScrollView } from "react-native"
 import { pois, Poi } from "../data/pois"
+import { colors } from "../theme/colors"
 
 const RoutesScreen = () => {
   const routes: Poi[] = useMemo(
@@ -44,6 +45,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     paddingTop: 60,
+    backgroundColor: colors.background,
+    flexGrow: 1,
   },
   title: {
     fontSize: 22,
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     height: 24,
-    backgroundColor: "#2f95dc",
+    backgroundColor: colors.primary,
     borderRadius: 4,
     marginRight: 12,
   },
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
   },
   barLength: {
     fontSize: 12,
-    color: "gray",
+    color: colors.gray,
     marginLeft: 6,
   },
 })

@@ -1,5 +1,6 @@
 import { Text, View, TouchableOpacity } from "react-native"
 import React from "react"
+import { colors } from "../theme/colors"
 import { useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import SearchBar from "../components/SearchBar"
@@ -93,7 +94,7 @@ const MapScreen = () => {
           }}
           style={{
             position: "absolute",
-            top: 30,
+            top: "5%",
             left: 16,
             right: 16,
           }}
@@ -102,7 +103,7 @@ const MapScreen = () => {
           style={styles.addButton}
           onPress={() => navigation.navigate("AddPlace")}
         >
-          <Text style={styles.addButtonText}>+ Lisää paikka</Text>
+          <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
         <ListSheet places={visiblePlaces} isLoading={loading} />
       </View>
@@ -121,15 +122,19 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: "absolute",
-    bottom: 200,
-    right: 16,
-    backgroundColor: "#2f95dc",
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    bottom: "27%",
+    right: "6%",
+    backgroundColor: colors.primary,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    justifyContent: "center",
+    alignItems: "center",
   },
   addButtonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: colors.white,
+    fontSize: 32,
+    lineHeight: 36,
+    fontWeight: "400",
   },
 })

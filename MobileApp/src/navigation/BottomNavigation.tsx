@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import LocationSelectScreen from '../screens/LocationSelectScreen';
+import { colors } from '../theme/colors';
 
 import ExploreScreen from '../screens/ExploreScreen';
 import MapScreen from '../screens/MapScreen';
@@ -27,10 +28,10 @@ const BottomNavigation = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#2f95dc',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
-          backgroundColor: "#fcfcf5",
+          backgroundColor: colors.background,
         },
       })}
     >

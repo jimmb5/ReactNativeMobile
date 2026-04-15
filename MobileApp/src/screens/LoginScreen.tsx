@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useLogin } from '../hooks/useLogin';
+import { colors } from '../theme/colors';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -113,7 +114,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FBFBEF',
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     height: 56,
     paddingHorizontal: 16,
     borderRadius: 4,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   errorText: {
-    color: '#CC0000',
+    color: colors.danger,
     fontSize: 14,
     textAlign: 'center',
   },
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 56,
-    backgroundColor: '#0F8226',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     }),
   },
   buttonText: {
-    color: '#000000',
+    color: colors.black,
     fontSize: 16,
     fontWeight: '500',
     letterSpacing: 0.1,
@@ -218,10 +219,10 @@ const styles = StyleSheet.create({
   socialButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D0D0D0',
+    borderColor: colors.grayLight,
     paddingVertical: 12,
     paddingHorizontal: 24,
     gap: 10,
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   socialButtonLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#000',
+    color: colors.black,
   },
   footerContainer: {
     marginTop: 'auto',    paddingTop: 40,
