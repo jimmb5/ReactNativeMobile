@@ -1,6 +1,7 @@
 import { View } from "react-native"
 import React from "react"
 import { IconButton, Searchbar } from "react-native-paper"
+import { colors } from "../theme/colors"
 
 type Props = {
   value: string
@@ -24,6 +25,7 @@ const SearchBar = ({
         value={value}
         onChangeText={onChange}
         mode="bar"
+        style={{ backgroundColor: colors.background }}
         right={(props) => (
           <IconButton {...props} icon="tune" onPress={onFilterPress} />
         )}

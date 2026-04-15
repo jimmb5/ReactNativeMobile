@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useAuth } from '../context/AuthContext';
+import { colors } from '../theme/colors';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Initialization'>;
 
@@ -68,7 +69,7 @@ export default InitializationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBFBEF',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 40,
@@ -116,10 +117,10 @@ const styles = StyleSheet.create({
     }),
   },
   buttonPrimary: {
-    backgroundColor: '#0F8226',
+    backgroundColor: colors.primary,
   },
   buttonSecondary: {
-    backgroundColor: '#FA9200',
+    backgroundColor: colors.secondary,
   },
   buttonPressed: {
     opacity: 0.8,
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     }),
   },
   buttonText: {
-    color: '#000000',
+    color: colors.black,
     fontSize: 16,
     fontWeight: '500',
     letterSpacing: 0.1,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.05)',
   },
   textButtonText: {
-    color: '#000000',
+    color: colors.black,
     fontSize: 16,
     fontWeight: '400',
     letterSpacing: 0.1,

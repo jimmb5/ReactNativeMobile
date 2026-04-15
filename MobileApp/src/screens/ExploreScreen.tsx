@@ -8,6 +8,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useExplore } from '../hooks/useExplore';
 import SwipeCard, { SwipeCardHandle, SwipeDirection } from '../components/SwipeCard';
+import { colors } from '../theme/colors';
 
 const ExploreScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -171,7 +172,7 @@ export default ExploreScreen;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FBFBEF',
+    backgroundColor: colors.background,
   },
   logoContainer: {
     alignItems: 'center',
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
     ...Platform.select({
@@ -234,11 +235,11 @@ const styles = StyleSheet.create({
   },
   actionButtonLeft: {
     borderWidth: 2,
-    borderColor: '#CC0000',
+    borderColor: colors.danger,
   },
   actionButtonRight: {
     borderWidth: 2,
-    borderColor: '#0F8226',
+    borderColor: colors.primary,
   },
   actionButtonPressed: {
     opacity: 0.75,
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     fontSize: 15,
-    color: '#666',
+    color: colors.gray,
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 32,
     height: 56,
-    backgroundColor: '#FA9200',
+    backgroundColor: colors.secondary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: colors.black,
     letterSpacing: 0.1,
   },
 });

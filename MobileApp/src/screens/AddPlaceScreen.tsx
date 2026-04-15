@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useAddPlace, CATEGORIES } from '../hooks/useAddPlace';
 import { useAuth } from '../context/AuthContext';
+import { colors } from '../theme/colors';
 import Slider from '@react-native-community/slider';
 
 const screenWidth = Dimensions.get('window').width;
@@ -32,7 +33,7 @@ const AddPlaceScreen = () => {
 
   if (!user) {
     return (
-      <SafeAreaView style={[styles.container, styles.guestSafeArea]}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.guestContainer}>
           <Text style={styles.guestTitle}>Haluatko lisätä paikan?</Text>
           <Text style={styles.guestSubtitle}>
@@ -173,6 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: colors.background,
   },
   label: {
     fontSize: 16,
@@ -216,24 +218,24 @@ chip: {
   paddingVertical: 6,
 },
 chipSelect: {
-  backgroundColor: '#2f95dc',
-  borderColor: '#2f95dc',
+  backgroundColor: colors.primary,
+  borderColor: colors.primary,
 },
 chipText: {
-  color: 'gray',
+  color: colors.gray,
 },
 chipTextSelect: {
-  color: 'white',
+  color: colors.white,
 },
 saveButton: {
-  backgroundColor: '#2f95dc',
+  backgroundColor: colors.primary,
   padding: 16,
   borderRadius: 8,
   alignItems: 'center',
   marginTop: 16,
 },
 saveButtonText: {
-  color: 'white',
+  color: colors.white,
   fontSize: 16,
   fontWeight: 'bold',
 },
@@ -241,9 +243,6 @@ slider: {
   width: '100%',
   height: 40,
   marginBottom: 16,
-},
-guestSafeArea: {
-  backgroundColor: '#FBFBEF',
 },
 guestContainer: {
   flex: 1,
@@ -259,14 +258,14 @@ guestTitle: {
 },
 guestSubtitle: {
   fontSize: 15,
-  color: '#666',
+  color: colors.gray,
   textAlign: 'center',
   marginBottom: 8,
 },
 loginButton: {
   width: '100%',
   height: 56,
-  backgroundColor: '#0F8226',
+  backgroundColor: colors.primary,
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 4,
@@ -290,7 +289,7 @@ loginButtonPressed: {
   }),
 },
 loginButtonText: {
-  color: '#000000',
+  color: colors.black,
   fontSize: 16,
   fontWeight: '500',
   letterSpacing: 0.1,
@@ -298,7 +297,7 @@ loginButtonText: {
 cancelButton: {
   width: '100%',
   height: 56,
-  backgroundColor: '#E8720C',
+  backgroundColor: colors.secondaryPressed,
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 4,
@@ -321,7 +320,7 @@ cancelButtonPressed: {
   }),
 },
 cancelButtonText: {
-  color: '#000000',
+  color: colors.black,
   fontSize: 16,
   fontWeight: '500',
   letterSpacing: 0.1,
