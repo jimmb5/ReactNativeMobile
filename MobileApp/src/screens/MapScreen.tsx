@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity } from "react-native"
-import React from "react"
+import React, { useRef } from "react"
 import { useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import SearchBar from "../components/SearchBar"
@@ -13,9 +13,12 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../navigation/navTypes"
 import { usePlaceSearch } from "../hooks/usePlaceSearch"
+import BottomSheet from "@gorhom/bottom-sheet"
+import FilterSheet from "../components/FilterSheet"
 
 const MapScreen = () => {
   const { visiblePlaces, searchQuery, loading, searchPlaces } = usePlaceSearch()
+  const filterSheetRef = useRef<BottomSheet>(null)
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -30,6 +33,10 @@ const MapScreen = () => {
     getCurrentLocation()
     startCompassTracking()
   }, [])
+
+  const openFilterSheet = () => {
+    filterSheetRef.current?.snapToIndex(1)
+  }
 
   const [heading, setHeading] = useState<number>(0)
 
@@ -88,9 +95,7 @@ const MapScreen = () => {
           value={searchQuery}
           onChange={searchPlaces}
           placeholder="Etsi kohteita tai reittejä..."
-          onFilterPress={() => {
-            console.log("Avaa suodatus bottom sheet")
-          }}
+          onFilterPress={openFilterSheet}
           style={{
             position: "absolute",
             top: 30,
@@ -105,6 +110,7 @@ const MapScreen = () => {
           <Text style={styles.addButtonText}>+ Lisää paikka</Text>
         </TouchableOpacity>
         <ListSheet places={visiblePlaces} isLoading={loading} />
+        <FilterSheet bottomSheetRef={filterSheetRef} />
       </View>
     </View>
   )
