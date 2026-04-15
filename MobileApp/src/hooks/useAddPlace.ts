@@ -58,6 +58,10 @@ export const useAddPlace = () => {
   };
 
   const handleSave = async () => {
+    if (!user) {
+      alert('Kirjaudu sisään lisätäksesi paikkoja');
+      return;
+    }
     if (!name || !location || !type) {
       alert('Täytä nimi, sijainti ja kategoria');
       return;
