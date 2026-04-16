@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useForgotPassword } from '../hooks/useForgotPassword';
+import { colors } from '../theme/colors';
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'ForgotPassword'>;
 
@@ -120,7 +121,7 @@ export default ForgotPasswordScreen;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FBFBEF',
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     height: 56,
     paddingHorizontal: 16,
     borderRadius: 4,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     }),
   },
   errorText: {
-    color: '#CC0000',
+    color: colors.danger,
     fontSize: 14,
     textAlign: 'center',
   },
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 56,
-    backgroundColor: '#0F8226',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
   buttonSecondary: {
     width: '100%',
     height: 56,
-    backgroundColor: '#E87722',
+    backgroundColor: colors.secondaryPressed,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
     }),
   },
   buttonText: {
-    color: '#000000',
+    color: colors.black,
     fontSize: 16,
     fontWeight: '500',
     letterSpacing: 0.1,

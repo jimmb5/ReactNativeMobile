@@ -1,11 +1,13 @@
 import React from 'react';
-import { Text, TextInput, StyleSheet, View } from 'react-native';
+import { Text, TextInput, StyleSheet, View, Platform, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useAddPlace, CATEGORIES } from '../hooks/useAddPlace';
+import { useAuth } from '../context/AuthContext';
+import { colors } from '../theme/colors';
 import Slider from '@react-native-community/slider';
 
 const screenWidth = Dimensions.get('window').width;
@@ -15,6 +17,7 @@ const imageSize = (screenWidth - padding * 2) / numColumns;
 
 const AddPlaceScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { user, signOut } = useAuth();
   const {
     name, setName,
     desc, setDesc,
@@ -27,6 +30,37 @@ const AddPlaceScreen = () => {
     toggleCategory,
     handleSave,
   } = useAddPlace();
+
+  if (!user) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.guestContainer}>
+          <Text style={styles.guestTitle}>Haluatko lisätä paikan?</Text>
+          <Text style={styles.guestSubtitle}>
+            Kirjaudu sisään lisätäksesi paikkoja.
+          </Text>
+          <Pressable
+            onPress={signOut}
+            style={({ pressed }) => [
+              styles.loginButton,
+              pressed && styles.loginButtonPressed,
+            ]}
+          >
+            <Text style={styles.loginButtonText}>Kirjaudu sisään</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={({ pressed }) => [
+              styles.cancelButton,
+              pressed && styles.cancelButtonPressed,
+            ]}
+          >
+            <Text style={styles.cancelButtonText}>Ei nyt</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -140,6 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: colors.background,
   },
   label: {
     fontSize: 16,
@@ -183,24 +218,24 @@ chip: {
   paddingVertical: 6,
 },
 chipSelect: {
-  backgroundColor: '#2f95dc',
-  borderColor: '#2f95dc',
+  backgroundColor: colors.primary,
+  borderColor: colors.primary,
 },
 chipText: {
-  color: 'gray',
+  color: colors.gray,
 },
 chipTextSelect: {
-  color: 'white',
+  color: colors.white,
 },
 saveButton: {
-  backgroundColor: '#2f95dc',
+  backgroundColor: colors.primary,
   padding: 16,
   borderRadius: 8,
   alignItems: 'center',
   marginTop: 16,
 },
 saveButtonText: {
-  color: 'white',
+  color: colors.white,
   fontSize: 16,
   fontWeight: 'bold',
 },
@@ -208,5 +243,86 @@ slider: {
   width: '100%',
   height: 40,
   marginBottom: 16,
+},
+guestContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: 16,
+  paddingHorizontal: 32,
+},
+guestTitle: {
+  fontSize: 22,
+  fontWeight: 'bold',
+  textAlign: 'center',
+},
+guestSubtitle: {
+  fontSize: 15,
+  color: colors.gray,
+  textAlign: 'center',
+  marginBottom: 8,
+},
+loginButton: {
+  width: '100%',
+  height: 56,
+  backgroundColor: colors.primary,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 4,
+  marginTop: 8,
+  ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+    },
+    android: {
+      elevation: 2,
+    },
+  }),
+},
+loginButtonPressed: {
+  opacity: 0.8,
+  ...Platform.select({
+    android: { elevation: 1 },
+  }),
+},
+loginButtonText: {
+  color: colors.black,
+  fontSize: 16,
+  fontWeight: '500',
+  letterSpacing: 0.1,
+},
+cancelButton: {
+  width: '100%',
+  height: 56,
+  backgroundColor: colors.secondaryPressed,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 4,
+  ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+    },
+    android: {
+      elevation: 2,
+    },
+  }),
+},
+cancelButtonPressed: {
+  opacity: 0.8,
+  ...Platform.select({
+    android: { elevation: 1 },
+  }),
+},
+cancelButtonText: {
+  color: colors.black,
+  fontSize: 16,
+  fontWeight: '500',
+  letterSpacing: 0.1,
 },
 });

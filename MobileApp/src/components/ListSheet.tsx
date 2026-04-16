@@ -8,6 +8,7 @@ import PoiCard from "./PoiCard"
 import { Place } from "../types/place"
 import { ActivityIndicator } from "react-native"
 import { Text } from "react-native-paper"
+import { colors } from "../theme/colors"
 
 type Props = {
   places: Place[]
@@ -38,6 +39,7 @@ const ListSheet = ({ places, isLoading }: Props) => {
       ref={bottomSheetRef}
       onChange={handleSheetChanges}
       snapPoints={snapPoints}
+      backgroundStyle={styles.sheetBackground}
     >
       <BottomSheetView style={styles.container}>
         <View style={styles.contentContainer}>
@@ -77,6 +79,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  sheetBackground: {
+    backgroundColor: colors.background,
   },
 })
 
