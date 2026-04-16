@@ -17,7 +17,7 @@ const imageSize = (screenWidth - padding * 2) / numColumns;
 
 const AddPlaceScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const {
     name, setName,
     desc, setDesc,
@@ -40,7 +40,7 @@ const AddPlaceScreen = () => {
             Kirjaudu sisään lisätäksesi paikkoja.
           </Text>
           <Pressable
-            onPress={() => navigation.navigate('Login')}
+            onPress={signOut}
             style={({ pressed }) => [
               styles.loginButton,
               pressed && styles.loginButtonPressed,

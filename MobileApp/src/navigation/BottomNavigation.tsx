@@ -9,7 +9,8 @@ import { colors } from '../theme/colors';
 import ExploreScreen from '../screens/ExploreScreen';
 import MapScreen from '../screens/MapScreen';
 import AddPlaceScreen from '../screens/AddPlaceScreen';
-import RoutesScreen from '../screens/RoutesScreen'
+import RoutesScreen from '../screens/RoutesScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -25,6 +26,7 @@ const BottomNavigation = () => {
           if (route.name === 'Explore') iconName = 'compass';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Routes') iconName = 'list';
+          else if (route.name === 'Profile') iconName = 'person';
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -38,6 +40,7 @@ const BottomNavigation = () => {
       <Tab.Screen name="Explore" component={ExploreScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
       <Tab.Screen name="Routes" component={RoutesScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

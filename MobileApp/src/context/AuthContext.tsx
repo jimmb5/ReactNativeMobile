@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import { User, onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 
 type AuthContextType = {
@@ -7,6 +7,7 @@ type AuthContextType = {
   isGuest: boolean;
   loading: boolean;
   continueAsGuest: () => void;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextType>({
   isGuest: false,
   loading: true,
   continueAsGuest: () => {},
+  signOut: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -35,8 +37,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsGuest(true);
   }
 
+  async function signOut() {
+    try {
+      await firebaseSignOut(auth);
+    } catch {
+      // ei mitään 
+    }
+    setIsGuest(false);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isGuest, loading, continueAsGuest }}>
+    <AuthContext.Provider value={{ user, isGuest, loading, continueAsGuest, signOut }}>
       {children}
     </AuthContext.Provider>
   );
