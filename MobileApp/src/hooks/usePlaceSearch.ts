@@ -7,17 +7,17 @@ export const usePlaceSearch = () => {
   const [visiblePlaces, setVisiblePlaces] = useState<Place[]>([])
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
-  const [selectedCategory, setSelectedCategory] = useState<string>("Kaikki")
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   useEffect(() => {
     loadPlaces()
   }, [])
 
   useEffect(() => {
-    const filtered = filterPlaces(allPlaces, searchQuery, selectedCategory)
+    const filtered = filterPlaces(allPlaces, searchQuery, selectedCategories)
 
     setVisiblePlaces(filtered)
-  }, [searchQuery, selectedCategory, allPlaces])
+  }, [searchQuery, selectedCategories, allPlaces])
 
   const loadPlaces = async (): Promise<void> => {
     setLoading(true)
@@ -36,7 +36,7 @@ export const usePlaceSearch = () => {
   const filterPlaces = (
     places: Place[],
     query: string,
-    category: string,
+    categories: string[],
   ): Place[] => {
     return places.filter((place) => {
       const matchesSearch =
@@ -47,7 +47,8 @@ export const usePlaceSearch = () => {
           tag.toLowerCase().includes(query.toLowerCase()),
         )
 
-      const matchesCategory = category === "Kaikki" || place.type === category
+      const matchesCategory =
+        categories.length === 0 || categories.includes(place.type)
 
       return matchesSearch && matchesCategory
     })
@@ -57,8 +58,16 @@ export const usePlaceSearch = () => {
     setSearchQuery(query)
   }
 
-  const selectCategory = (category: string): void => {
-    setSelectedCategory(category)
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      const isSelected = prev.includes(category)
+
+      if (isSelected) {
+        return prev.filter((c) => c !== category)
+      }
+
+      return [...prev, category]
+    })
   }
 
   return {
@@ -66,8 +75,8 @@ export const usePlaceSearch = () => {
     searchQuery,
     loading,
     searchPlaces,
-    selectCategory,
-    selectedCategory,
+    toggleCategory,
+    selectedCategories,
     reloadPlaces: loadPlaces,
   }
 }

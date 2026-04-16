@@ -5,12 +5,11 @@ import { Chip, Divider, Text } from "react-native-paper"
 
 type Props = {
   bottomSheetRef: React.RefObject<BottomSheet | null>
-  selectedCategory: string
-  onCategorySelect: (category: string) => void
+  selectedCategories: string[]
+  onCategoryToggle: (category: string) => void
 }
 
 const CATEGORIES = [
-  "Kaikki",
   "Leikkipuisto",
   "Koirapuisto",
   "Uimapaikka",
@@ -21,8 +20,8 @@ const CATEGORIES = [
 
 const FilterSheet = ({
   bottomSheetRef,
-  selectedCategory,
-  onCategorySelect,
+  selectedCategories,
+  onCategoryToggle,
 }: Props) => {
   const snapPoints = ["96%"]
 
@@ -47,14 +46,21 @@ const FilterSheet = ({
           {CATEGORIES.map((type) => (
             <Chip
               key={type}
-              style={styles.chip}
-              compact={true}
-              showSelectedCheck={true}
-              showSelectedOverlay={true}
-              selected={selectedCategory === type}
-              onPress={() => onCategorySelect(type)}
+              compact
+              selected={selectedCategories.includes(type)}
+              selectedColor="white"
+              style={[
+                styles.chip,
+                selectedCategories.includes(type) && styles.selectedChip,
+              ]}
+              textStyle={
+                selectedCategories.includes(type)
+                  ? styles.selectedChipText
+                  : styles.chipText
+              }
+              onPress={() => onCategoryToggle(type)}
             >
-              <Text variant="bodySmall">{type}</Text>
+              {type}
             </Chip>
           ))}
         </View>
@@ -81,6 +87,18 @@ const styles = StyleSheet.create({
   chip: {
     backgroundColor: "#e0e0e0",
     marginVertical: 2,
+  },
+
+  selectedChip: {
+    backgroundColor: "#2f95dc",
+  },
+
+  chipText: {
+    color: "black",
+  },
+
+  selectedChipText: {
+    color: "white",
   },
   divider: {
     marginTop: 16,

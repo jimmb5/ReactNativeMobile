@@ -22,8 +22,8 @@ const MapScreen = () => {
     searchQuery,
     loading,
     searchPlaces,
-    selectCategory,
-    selectedCategory,
+    toggleCategory,
+    selectedCategories,
   } = usePlaceSearch()
   const filterSheetRef = useRef<BottomSheet>(null)
 
@@ -119,8 +119,8 @@ const MapScreen = () => {
         <ListSheet places={visiblePlaces} isLoading={loading} />
         <FilterSheet
           bottomSheetRef={filterSheetRef}
-          selectedCategory={selectedCategory}
-          onCategorySelect={selectCategory}
+          selectedCategories={selectedCategories}
+          onCategoryToggle={toggleCategory}
         />
       </View>
     </View>
