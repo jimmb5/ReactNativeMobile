@@ -1,6 +1,5 @@
 import { Text, View, TouchableOpacity } from "react-native"
 import React, { useRef } from "react"
-import React from "react"
 import { colors } from "../theme/colors"
 import { useEffect, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
