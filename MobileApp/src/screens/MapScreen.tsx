@@ -1,4 +1,5 @@
 import { Text, View, TouchableOpacity } from "react-native"
+import React, { useRef } from "react"
 import React from "react"
 import { colors } from "../theme/colors"
 import { useEffect, useState } from "react"
@@ -14,9 +15,19 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../navigation/navTypes"
 import { usePlaceSearch } from "../hooks/usePlaceSearch"
+import BottomSheet from "@gorhom/bottom-sheet"
+import FilterSheet from "../components/FilterSheet"
 
 const MapScreen = () => {
-  const { visiblePlaces, searchQuery, loading, searchPlaces } = usePlaceSearch()
+  const {
+    visiblePlaces,
+    searchQuery,
+    loading,
+    searchPlaces,
+    toggleCategory,
+    selectedCategories,
+  } = usePlaceSearch()
+  const filterSheetRef = useRef<BottomSheet>(null)
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>()
@@ -31,6 +42,10 @@ const MapScreen = () => {
     getCurrentLocation()
     startCompassTracking()
   }, [])
+
+  const openFilterSheet = () => {
+    filterSheetRef.current?.snapToIndex(1)
+  }
 
   const [heading, setHeading] = useState<number>(0)
 
@@ -89,9 +104,7 @@ const MapScreen = () => {
           value={searchQuery}
           onChange={searchPlaces}
           placeholder="Etsi kohteita tai reittejä..."
-          onFilterPress={() => {
-            console.log("Avaa suodatus bottom sheet")
-          }}
+          onFilterPress={openFilterSheet}
           style={{
             position: "absolute",
             top: "5%",
@@ -106,6 +119,11 @@ const MapScreen = () => {
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
         <ListSheet places={visiblePlaces} isLoading={loading} />
+        <FilterSheet
+          bottomSheetRef={filterSheetRef}
+          selectedCategories={selectedCategories}
+          onCategoryToggle={toggleCategory}
+        />
       </View>
     </View>
   )

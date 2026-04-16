@@ -7,10 +7,17 @@ export const usePlaceSearch = () => {
   const [visiblePlaces, setVisiblePlaces] = useState<Place[]>([])
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   useEffect(() => {
     loadPlaces()
   }, [])
+
+  useEffect(() => {
+    const filtered = filterPlaces(allPlaces, searchQuery, selectedCategories)
+
+    setVisiblePlaces(filtered)
+  }, [searchQuery, selectedCategories, allPlaces])
 
   const loadPlaces = async (): Promise<void> => {
     setLoading(true)
@@ -19,7 +26,6 @@ export const usePlaceSearch = () => {
       const places = await getAllPlaces()
 
       setAllPlaces(places)
-      setVisiblePlaces(places)
     } catch (error) {
       console.error("Virhe paikkojen haussa:", error)
     } finally {
@@ -27,30 +33,41 @@ export const usePlaceSearch = () => {
     }
   }
 
+  const filterPlaces = (
+    places: Place[],
+    query: string,
+    categories: string[],
+  ): Place[] => {
+    return places.filter((place) => {
+      const matchesSearch =
+        !query.trim() ||
+        place.name.toLowerCase().includes(query.toLowerCase()) ||
+        place.type.toLowerCase().includes(query.toLowerCase()) ||
+        place.tags.some((tag) =>
+          tag.toLowerCase().includes(query.toLowerCase()),
+        )
+
+      const matchesCategory =
+        categories.length === 0 || categories.includes(place.type)
+
+      return matchesSearch && matchesCategory
+    })
+  }
+
   const searchPlaces = (query: string): void => {
     setSearchQuery(query)
+  }
 
-    // jos hakukenttä tyhjä -> näytä kaikki
-    if (!query.trim()) {
-      setVisiblePlaces(allPlaces)
-      return
-    }
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      const isSelected = prev.includes(category)
 
-    const lowerCaseQuery = query.toLowerCase()
+      if (isSelected) {
+        return prev.filter((c) => c !== category)
+      }
 
-    const filtered = allPlaces.filter((place) => {
-      const matchesType = place.type.toLowerCase().includes(lowerCaseQuery)
-
-      const matchesName = place.name.toLowerCase().includes(lowerCaseQuery)
-
-      const matchesTags = place.tags.some((tag) =>
-        tag.toLowerCase().includes(lowerCaseQuery),
-      )
-
-      return matchesType || matchesName || matchesTags
+      return [...prev, category]
     })
-
-    setVisiblePlaces(filtered)
   }
 
   return {
@@ -58,6 +75,8 @@ export const usePlaceSearch = () => {
     searchQuery,
     loading,
     searchPlaces,
+    toggleCategory,
+    selectedCategories,
     reloadPlaces: loadPlaces,
   }
 }

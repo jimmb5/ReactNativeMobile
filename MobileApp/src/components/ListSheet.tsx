@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react"
-import { View, Text, StyleSheet, ListRenderItem } from "react-native"
+import { View, StyleSheet, ListRenderItem } from "react-native"
 import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetView,
@@ -7,6 +7,7 @@ import BottomSheet, {
 import PoiCard from "./PoiCard"
 import { Place } from "../types/place"
 import { ActivityIndicator } from "react-native"
+import { Text } from "react-native-paper"
 import { colors } from "../theme/colors"
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
 const ListSheet = ({ places, isLoading }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
 
-  const snapPoints = ["25%", "60%", "100%"]
+  const snapPoints = ["20%", "60%", "96%"]
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log("handleSheetChanges", index)
@@ -41,19 +42,22 @@ const ListSheet = ({ places, isLoading }: Props) => {
       backgroundStyle={styles.sheetBackground}
     >
       <BottomSheetView style={styles.container}>
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" />
-            <Text>Ladataan...</Text>
-          </View>
-        ) : (
-          <BottomSheetFlatList
-            data={places}
-            keyExtractor={(item: Place) => item.id}
-            renderItem={renderItem}
-            contentContainerStyle={styles.listContent}
-          />
-        )}
+        <View style={styles.contentContainer}>
+          <Text variant="titleMedium">Löydetyt kohteet</Text>
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" />
+              <Text>Ladataan kohteita...</Text>
+            </View>
+          ) : (
+            <BottomSheetFlatList
+              data={places}
+              keyExtractor={(item: Place) => item.id}
+              renderItem={renderItem}
+              contentContainerStyle={styles.listContent}
+            />
+          )}
+        </View>
       </BottomSheetView>
     </BottomSheet>
   )
@@ -63,8 +67,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  contentContainer: {
+    flex: 1,
+    padding: 16,
+  },
   listContent: {
-    padding: 12,
+    paddingTop: 12,
     gap: 8,
   },
   loadingContainer: {
