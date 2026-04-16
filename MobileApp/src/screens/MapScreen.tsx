@@ -17,7 +17,14 @@ import BottomSheet from "@gorhom/bottom-sheet"
 import FilterSheet from "../components/FilterSheet"
 
 const MapScreen = () => {
-  const { visiblePlaces, searchQuery, loading, searchPlaces } = usePlaceSearch()
+  const {
+    visiblePlaces,
+    searchQuery,
+    loading,
+    searchPlaces,
+    selectCategory,
+    selectedCategory,
+  } = usePlaceSearch()
   const filterSheetRef = useRef<BottomSheet>(null)
 
   const navigation =
@@ -110,7 +117,11 @@ const MapScreen = () => {
           <Text style={styles.addButtonText}>+ Lisää paikka</Text>
         </TouchableOpacity>
         <ListSheet places={visiblePlaces} isLoading={loading} />
-        <FilterSheet bottomSheetRef={filterSheetRef} />
+        <FilterSheet
+          bottomSheetRef={filterSheetRef}
+          selectedCategory={selectedCategory}
+          onCategorySelect={selectCategory}
+        />
       </View>
     </View>
   )

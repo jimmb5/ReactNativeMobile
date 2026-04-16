@@ -5,19 +5,25 @@ import { Chip, Divider, Text } from "react-native-paper"
 
 type Props = {
   bottomSheetRef: React.RefObject<BottomSheet | null>
+  selectedCategory: string
+  onCategorySelect: (category: string) => void
 }
 
 const CATEGORIES = [
   "Kaikki",
-  "Leikkipuistot",
-  "Koirapuistot",
-  "Uimapaikat",
-  "Reitit",
-  "Nuotiopaikat",
-  "Laavut",
+  "Leikkipuisto",
+  "Koirapuisto",
+  "Uimapaikka",
+  "Reitti",
+  "Nuotiopaikka",
+  "Laavu",
 ]
 
-const FilterSheet = ({ bottomSheetRef }: Props) => {
+const FilterSheet = ({
+  bottomSheetRef,
+  selectedCategory,
+  onCategorySelect,
+}: Props) => {
   const snapPoints = ["96%"]
 
   const handleSheetChanges = useCallback((index: number) => {
@@ -45,6 +51,8 @@ const FilterSheet = ({ bottomSheetRef }: Props) => {
               compact={true}
               showSelectedCheck={true}
               showSelectedOverlay={true}
+              selected={selectedCategory === type}
+              onPress={() => onCategorySelect(type)}
             >
               <Text variant="bodySmall">{type}</Text>
             </Chip>
