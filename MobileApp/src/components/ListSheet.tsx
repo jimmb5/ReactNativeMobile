@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef } from "react"
 import { View, StyleSheet, ListRenderItem } from "react-native"
 import BottomSheet, {
   BottomSheetFlatList,
+  BottomSheetScrollView,
   BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import PoiCard from "./PoiCard"
@@ -41,24 +42,22 @@ const ListSheet = ({ places, isLoading }: Props) => {
       snapPoints={snapPoints}
       backgroundStyle={styles.sheetBackground}
     >
-      <BottomSheetView style={styles.container}>
-        <View style={styles.contentContainer}>
-          <Text variant="titleMedium">Löydetyt kohteet</Text>
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" />
-              <Text>Ladataan kohteita...</Text>
-            </View>
-          ) : (
-            <BottomSheetFlatList
-              data={places}
-              keyExtractor={(item: Place) => item.id}
-              renderItem={renderItem}
-              contentContainerStyle={styles.listContent}
-            />
-          )}
-        </View>
-      </BottomSheetView>
+      <View style={styles.contentContainer}>
+        <Text variant="titleMedium">Löydetyt kohteet</Text>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+            <Text>Ladataan kohteita...</Text>
+          </View>
+        ) : (
+          <BottomSheetFlatList
+            data={places}
+            keyExtractor={(item: Place) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContent}
+          />
+        )}
+      </View>
     </BottomSheet>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Place } from "../types/place"
 import { getAllPlaces } from "../../services/placeService"
+import { seedPlacesToFirestore } from "../../services/mockdataa"
 
 export const usePlaceSearch = () => {
   const [allPlaces, setAllPlaces] = useState<Place[]>([])
@@ -8,8 +9,8 @@ export const usePlaceSearch = () => {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [maxDistance, setMaxDistance] = useState<number>(50)
-  const [maxRouteLength, setMaxRouteLength] = useState<number>(50)
+  const [maxDistance, setMaxDistance] = useState<number>(15)
+  const [maxRouteLength, setMaxRouteLength] = useState<number>(15)
 
   useEffect(() => {
     loadPlaces()

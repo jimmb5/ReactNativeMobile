@@ -1,16 +1,18 @@
 export const colors = {
-  background: '#FBFBEF',
+  background: "#FBFBEF",
 
-  primary: '#0F8226',
-  primaryPressed: '#0F8226',
+  primary: "#0F8226",
+  primaryPressed: "#0F8226",
 
-  secondary: '#FA9200',
-  secondaryPressed: '#E8720C',
+  secondary: "#FA9200",
+  secondaryPressed: "#E8720C",
 
-  danger: '#CC0000',
+  tertiary: "#e8e8d9",
 
-  white: '#FFFFFF',
-  black: '#000000',
-  gray: '#666666',
-  grayLight: '#D0D0D0',
-} as const;
+  danger: "#CC0000",
+
+  white: "#FFFFFF",
+  black: "#000000",
+  gray: "#666666",
+  grayLight: "#D0D0D0",
+} as const
