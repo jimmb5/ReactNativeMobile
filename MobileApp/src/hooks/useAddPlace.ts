@@ -16,6 +16,8 @@ export const useAddPlace = () => {
   const [type, setType] = useState<string>('');
   const [location, setLocation] = useState<PlaceLocation | null>(null);
   const [length, setLength] = useState<number>(0);
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
   const { user } = useAuth();
 
   const pickImage = async () => {
@@ -42,6 +44,18 @@ export const useAddPlace = () => {
   const toggleCategory = (catg: string) => {
     setType(prev => prev === catg ? '' : catg);
   };
+
+  const addTag = () => {
+  const trimmed = tagInput.trim();
+  if (trimmed === '') return;
+  if (tags.includes(trimmed)) return;
+  setTags(prev => [...prev, trimmed]);
+  setTagInput('');
+};
+
+const removeTag = (tag: string) => {
+  setTags(prev => prev.filter(t => t !== tag));
+};
 
   const uploadImages = async (): Promise<string[]> => {
     const urls: string[] = [];
@@ -73,7 +87,10 @@ export const useAddPlace = () => {
         type,
         description: desc,
         location,
-        tags: [],
+        tags,
+        tagInput, setTagInput,
+        addTag,
+        removeTag,
         distance: '',
         length,
         imageUrls,
