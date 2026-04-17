@@ -15,7 +15,14 @@ const PoiCard = ({ poi, onPress }: Props) => {
       <Card.Title
         title={poi.name}
         subtitle={poi.type}
-        left={(props) => <Avatar.Icon {...props} icon="map-marker" color={colors.white} style={{ backgroundColor: colors.primary }} />}
+        left={(props) => (
+          <Avatar.Icon
+            {...props}
+            icon="map-marker"
+            color={colors.white}
+            style={{ backgroundColor: colors.primary }}
+          />
+        )}
       />
       <Card.Content>
         {poi.type === "Reitti" ? (
@@ -40,7 +47,7 @@ export default PoiCard
 const styles = StyleSheet.create({
   card: {
     marginVertical: 4,
-    backgroundColor: colors.background,
+    backgroundColor: "#f3f3e7",
   },
   tagsContainer: {
     flexDirection: "row",
@@ -49,7 +56,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   chip: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.tertiary,
     marginVertical: 2,
   },
 })
