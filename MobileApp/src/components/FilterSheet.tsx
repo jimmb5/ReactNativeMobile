@@ -2,11 +2,16 @@ import React, { useCallback, useRef } from "react"
 import { StyleSheet, View } from "react-native"
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { Chip, Divider, Text } from "react-native-paper"
+import Slider from "@react-native-community/slider"
 
 type Props = {
   bottomSheetRef: React.RefObject<BottomSheet | null>
   selectedCategories: string[]
   onCategoryToggle: (category: string) => void
+  onDistanceChange: (distance: number) => void
+  onRouteLengthChange: (length: number) => void
+  maxDistance: number
+  maxRouteLength: number
 }
 
 const CATEGORIES = [
@@ -22,6 +27,10 @@ const FilterSheet = ({
   bottomSheetRef,
   selectedCategories,
   onCategoryToggle,
+  onDistanceChange,
+  onRouteLengthChange,
+  maxDistance,
+  maxRouteLength,
 }: Props) => {
   const snapPoints = ["96%"]
 
@@ -36,6 +45,7 @@ const FilterSheet = ({
       snapPoints={snapPoints}
       index={-1}
       enablePanDownToClose={true}
+      enableContentPanningGesture={false}
       style={styles.container}
     >
       <BottomSheetView style={styles.contentContainer}>
@@ -65,6 +75,24 @@ const FilterSheet = ({
           ))}
         </View>
         <Divider style={styles.divider} />
+        <Text>Etäisyys: {maxDistance} km</Text>
+        <Slider
+          style={{ width: "100%", height: 40 }}
+          minimumValue={0}
+          maximumValue={50}
+          step={1}
+          value={maxDistance}
+          onSlidingComplete={onDistanceChange}
+        />
+        <Text>Reitin pituus: {maxRouteLength} km</Text>
+        <Slider
+          style={{ width: "100%", height: 40 }}
+          minimumValue={0}
+          maximumValue={50}
+          step={1}
+          value={maxRouteLength}
+          onSlidingComplete={onRouteLengthChange}
+        />
       </BottomSheetView>
     </BottomSheet>
   )

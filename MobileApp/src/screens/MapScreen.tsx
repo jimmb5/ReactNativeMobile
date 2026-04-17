@@ -25,6 +25,10 @@ const MapScreen = () => {
     searchPlaces,
     toggleCategory,
     selectedCategories,
+    setDistance,
+    setRouteLength,
+    maxDistance,
+    maxRouteLength,
   } = usePlaceSearch()
   const filterSheetRef = useRef<BottomSheet>(null)
 
@@ -122,6 +126,10 @@ const MapScreen = () => {
           bottomSheetRef={filterSheetRef}
           selectedCategories={selectedCategories}
           onCategoryToggle={toggleCategory}
+          onDistanceChange={setDistance}
+          onRouteLengthChange={setRouteLength}
+          maxDistance={maxDistance}
+          maxRouteLength={maxRouteLength}
         />
       </View>
     </View>

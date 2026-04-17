@@ -8,6 +8,8 @@ export const usePlaceSearch = () => {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [maxDistance, setMaxDistance] = useState<number>(50)
+  const [maxRouteLength, setMaxRouteLength] = useState<number>(50)
 
   useEffect(() => {
     loadPlaces()
@@ -17,7 +19,7 @@ export const usePlaceSearch = () => {
     const filtered = filterPlaces(allPlaces, searchQuery, selectedCategories)
 
     setVisiblePlaces(filtered)
-  }, [searchQuery, selectedCategories, allPlaces])
+  }, [searchQuery, selectedCategories, allPlaces, maxDistance, maxRouteLength])
 
   const loadPlaces = async (): Promise<void> => {
     setLoading(true)
@@ -50,7 +52,12 @@ export const usePlaceSearch = () => {
       const matchesCategory =
         categories.length === 0 || categories.includes(place.type)
 
-      return matchesSearch && matchesCategory
+      const matchesDistance = Number(place.distance) <= maxDistance
+      const matchesLength = !place.length || place.length <= maxRouteLength
+
+      return (
+        matchesSearch && matchesCategory && matchesDistance && matchesLength
+      )
     })
   }
 
@@ -70,6 +77,13 @@ export const usePlaceSearch = () => {
     })
   }
 
+  const setDistance = (distance: number): void => {
+    setMaxDistance(distance)
+  }
+  const setRouteLength = (length: number): void => {
+    setMaxRouteLength(length)
+  }
+
   return {
     visiblePlaces,
     searchQuery,
@@ -77,6 +91,10 @@ export const usePlaceSearch = () => {
     searchPlaces,
     toggleCategory,
     selectedCategories,
+    setDistance,
+    setRouteLength,
+    maxDistance,
+    maxRouteLength,
     reloadPlaces: loadPlaces,
   }
 }
