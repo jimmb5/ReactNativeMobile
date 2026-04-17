@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Place } from "../types/place"
 import { getAllPlaces } from "../../services/placeService"
-import { seedPlacesToFirestore } from "../../services/mockdataa"
 
 export const usePlaceSearch = () => {
   const [allPlaces, setAllPlaces] = useState<Place[]>([])
