@@ -9,6 +9,10 @@ import { useAddPlace, CATEGORIES } from '../hooks/useAddPlace';
 import { useAuth } from '../context/AuthContext';
 import { colors } from '../theme/colors';
 import Slider from '@react-native-community/slider';
+import CategoryPicker from '../components/CategoryPicker';
+import TagInput from '../components/TagInput';
+import PlaceImagePicker from '../components/PlaceImagePicker';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const screenWidth = Dimensions.get('window').width;
 const padding = 16;
@@ -25,6 +29,10 @@ const AddPlaceScreen = () => {
     type,
     location, setLocation,
     length, setLength,
+    tagInput, setTagInput,
+    tags,
+    addTag,
+    removeTag,
     pickImage,
     removeImage,
     toggleCategory,
@@ -63,108 +71,77 @@ const AddPlaceScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-  data={images}
-  numColumns={4}
-  keyExtractor={(item, index) => index.toString()}
-  ListHeaderComponent={
-    <View>
-        <Text style={styles.label}>Nimi</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Laita paikan nimi"
-          value={name}
-          onChangeText={setName}
-        />
+  <SafeAreaView style={styles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+      
+      <Text style={styles.label}>Nimi</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Laita paikan nimi"
+        value={name}
+        onChangeText={setName}
+      />
 
-
-        <Text style={styles.label}>Sijainti</Text>
-<TouchableOpacity
-  style={styles.addImageButton}
-  onPress={() => navigation.navigate('LocationSelect', {
-    onLocationSelected: (lat, lng) => {
-      setLocation({ latitude: lat, longitude: lng });
-    }
-  })}
->
-
-
-  <Text>
-    {location
-      ? `📍 ${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
-      : 'Valitse sijainti kartalta'}
-  </Text>
-
-   
-
-
-</TouchableOpacity>
-        <Text style={styles.label}>Kategoriat</Text>
-<View style={styles.categoriesContainer}>
-  {CATEGORIES.map((catg: string) => {
-    const isSelected = type === catg;
-    return (
+      <Text style={styles.label}>Sijainti</Text>
       <TouchableOpacity
-        key={catg}
-        style={[styles.chip, isSelected && styles.chipSelect]}
-        onPress={() => toggleCategory(catg)}
+        style={styles.addImageButton}
+        onPress={() => navigation.navigate('LocationSelect', {
+          onLocationSelected: (lat, lng) => {
+            setLocation({ latitude: lat, longitude: lng });
+          }
+        })}
       >
-        <Text style={[styles.chipText, isSelected && styles.chipTextSelect]}>
-          {catg}
+        <Text>
+          {location
+            ? `📍 ${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
+            : 'Valitse sijainti kartalta'}
         </Text>
       </TouchableOpacity>
-    );
-  })}
 
-<Text style={styles.label}>
-  Reitin pituus: {length === 0 ? 'Ei reittiä' 
-  : length === 5000 ? '5000 m +' 
-  : `${length} m`}
-</Text>
-<Slider
-  style={styles.slider}
-  minimumValue={0}
-  maximumValue={5000}
-  step={50}
-  value={length}
-  onValueChange={setLength}
-  minimumTrackTintColor="#2f95dc"
-  maximumTrackTintColor="gray"
-/>
+      <CategoryPicker categories={CATEGORIES} selected={type} onSelect={toggleCategory} />
 
-</View>
-        <Text style={styles.label}>Paikan kuvaus</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Laita paikan kuvaus"
-          value={desc}
-          onChangeText={setDesc}
-          multiline
-        />
+      <TagInput 
+        tagInput={tagInput} 
+        onTagInputChange={setTagInput} 
+        tags={tags} 
+        onAddTag={addTag} 
+        onRemoveTag={removeTag} 
+      />
 
+      <Text style={styles.label}>
+        Reitin pituus: {length === 0 ? 'Ei reittiä' : length === 5000 ? '5000 m +' : `${length} m`}
+      </Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={0}
+        maximumValue={5000}
+        step={50}
+        value={length}
+        onValueChange={setLength}
+        minimumTrackTintColor={colors.primary}
+        maximumTrackTintColor="gray"
+        thumbTintColor={colors.primary}
+      />
 
-        <Text style={styles.label}>Kuvat</Text>
-<TouchableOpacity style={styles.addImageButton} onPress={pickImage}>
-  <Text>LISÄÄ KUVIA</Text>
-</TouchableOpacity>
-      </View>
-  }
-  renderItem={({ item, index }) => (
-  <TouchableOpacity onPress={() => removeImage(index)}>
-    <Image source={{ uri: item }} style={styles.image} />
-  </TouchableOpacity>
-)}
-ListFooterComponent={
-  <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-    <Text style={styles.saveButtonText}>Tallenna paikka</Text>
-  </TouchableOpacity>
-}
-/>
+      <Text style={styles.label}>Paikan kuvaus</Text>
+      <TextInput
+        style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+        placeholder="Laita paikan kuvaus"
+        value={desc}
+        onChangeText={setDesc}
+        multiline
+      />
 
-      
-    </SafeAreaView> 
-  );
+      <Text style={styles.label}>Kuvat</Text>
+      <PlaceImagePicker images={images} onAdd={pickImage} onRemove={removeImage} />
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Tallenna paikka</Text>
+      </TouchableOpacity>
+
+    </ScrollView>
+  </SafeAreaView>
+);
 };
 
 
@@ -192,137 +169,112 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   addImageButton: {
-  borderWidth: 1,
-  borderColor: 'gray',
-  borderRadius: 8,
-  padding: 12,
-  alignItems: 'center', 
-  marginBottom: 16,
-},
-image: {
-  width: imageSize,
-  height: imageSize,
-  padding: 2,
-},
-categoriesContainer: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  marginBottom: 16,
-  gap: 8,
-},
-chip: {
-  borderWidth: 1,
-  borderColor: 'gray',
-  borderRadius: 16,
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-},
-chipSelect: {
-  backgroundColor: colors.primary,
-  borderColor: colors.primary,
-},
-chipText: {
-  color: colors.gray,
-},
-chipTextSelect: {
-  color: colors.white,
-},
-saveButton: {
-  backgroundColor: colors.primary,
-  padding: 16,
-  borderRadius: 8,
-  alignItems: 'center',
-  marginTop: 16,
-},
-saveButtonText: {
-  color: colors.white,
-  fontSize: 16,
-  fontWeight: 'bold',
-},
-slider: {
-  width: '100%',
-  height: 40,
-  marginBottom: 16,
-},
-guestContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  gap: 16,
-  paddingHorizontal: 32,
-},
-guestTitle: {
-  fontSize: 22,
-  fontWeight: 'bold',
-  textAlign: 'center',
-},
-guestSubtitle: {
-  fontSize: 15,
-  color: colors.gray,
-  textAlign: 'center',
-  marginBottom: 8,
-},
-loginButton: {
-  width: '100%',
-  height: 56,
-  backgroundColor: colors.primary,
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: 4,
-  marginTop: 8,
-  ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.2,
-      shadowRadius: 1.41,
-    },
-    android: {
-      elevation: 2,
-    },
-  }),
-},
-loginButtonPressed: {
-  opacity: 0.8,
-  ...Platform.select({
-    android: { elevation: 1 },
-  }),
-},
-loginButtonText: {
-  color: colors.black,
-  fontSize: 16,
-  fontWeight: '500',
-  letterSpacing: 0.1,
-},
-cancelButton: {
-  width: '100%',
-  height: 56,
-  backgroundColor: colors.secondaryPressed,
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: 4,
-  ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.2,
-      shadowRadius: 1.41,
-    },
-    android: {
-      elevation: 2,
-    },
-  }),
-},
-cancelButtonPressed: {
-  opacity: 0.8,
-  ...Platform.select({
-    android: { elevation: 1 },
-  }),
-},
-cancelButtonText: {
-  color: colors.black,
-  fontSize: 16,
-  fontWeight: '500',
-  letterSpacing: 0.1,
-},
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  
+
+  saveButton: {
+    backgroundColor: colors.primary,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  saveButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+    marginBottom: 16,
+  },
+
+  guestContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+    paddingHorizontal: 32,
+  },
+  guestTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  guestSubtitle: {
+    fontSize: 15,
+    color: colors.gray,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  loginButton: {
+    width: '100%',
+    height: 56,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    marginTop: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  loginButtonPressed: {
+    opacity: 0.8,
+    ...Platform.select({
+      android: { elevation: 1 },
+    }),
+  },
+  loginButtonText: {
+    color: colors.black,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.1,
+  },
+  cancelButton: {
+    width: '100%',
+    height: 56,
+    backgroundColor: colors.secondaryPressed,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  cancelButtonPressed: {
+    opacity: 0.8,
+    ...Platform.select({
+      android: { elevation: 1 },
+    }),
+  },
+  cancelButtonText: {
+    color: colors.black,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.1,
+  },
 });
