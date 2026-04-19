@@ -13,10 +13,15 @@ import { useAuth } from '../context/AuthContext';
 import { useSavedPlacesData } from '../hooks/useSavedPlacesData';
 import { colors } from '../theme/colors';
 import PoiCard from '../components/PoiCard';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'; 
+import { RootStackParamList } from '../navigation/navTypes';
+
 
 const ProfileScreen = () => {
   const { user, isGuest, signOut } = useAuth();
   const { places, loading, error } = useSavedPlacesData();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   if (isGuest && !user) {
     return (
@@ -46,6 +51,9 @@ const ProfileScreen = () => {
               <Text style={styles.email}>{user?.email}</Text>
             </View>
 
+<Pressable onPress={() => navigation.navigate('MyPlaces')}>
+  <Text style={styles.sectionTitle}>Omat paikat →</Text>
+</Pressable>
             <Text style={styles.sectionTitle}>Tallennetut paikat</Text>
 
             {loading && (

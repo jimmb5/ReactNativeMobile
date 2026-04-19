@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Map: undefined;
   MainApp: undefined;
   AddPlace: undefined;
+  MyPlaces: undefined;
   LocationSelect: {
     onLocationSelected: (latitude: number, longitude: number) => void;
   };

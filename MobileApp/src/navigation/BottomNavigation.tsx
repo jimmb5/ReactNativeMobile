@@ -11,6 +11,8 @@ import MapScreen from '../screens/MapScreen';
 import AddPlaceScreen from '../screens/AddPlaceScreen';
 import RoutesScreen from '../screens/RoutesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import MyPlacesScreen from '../screens/MyPlacesScreen';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -51,6 +53,7 @@ const StackNavigation = () => {
       <Stack.Screen name="MainApp" component={BottomNavigation} />
       <Stack.Screen name="AddPlace" component={AddPlaceScreen} />
       <Stack.Screen name="LocationSelect" component={LocationSelectScreen} />
+      <Stack.Screen name="MyPlaces" component={MyPlacesScreen} />
     </Stack.Navigator>
   );
 };
