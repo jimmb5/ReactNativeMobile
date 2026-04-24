@@ -29,8 +29,9 @@ const PoiCard = ({ poi, onPress }: Props) => {
           <Text variant="bodySmall">Pituus: {poi.length} km</Text>
         ) : null}
         <Text variant="bodySmall">
-          Etäisyys:{" "}
-          {poi.distance != null ? `${poi.distance.toFixed(1)} km` : "—"}
+          {typeof poi.distance === "number"
+            ? `Etäisyys: ${poi.distance.toFixed(1)} km`
+            : ""}
         </Text>
         <Text variant="bodySmall">{poi.description}</Text>
         <View style={styles.tagsContainer}>
