@@ -10,6 +10,9 @@ import { Place } from "../types/place"
 import { ActivityIndicator } from "react-native"
 import { Text } from "react-native-paper"
 import { colors } from "../theme/colors"
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
 
 
 type Props = {
@@ -26,16 +29,18 @@ const ListSheet = ({ places, isLoading }: Props) => {
     console.log("handleSheetChanges", index)
   }, [])
 
-  const handlePoiPress = (poiId: string) => {
-    console.log("Pressed poi:", poiId)
-  }
+  const handlePoiPress = (place: Place) => {
+  navigation.navigate('PlaceDetail', { place });
+};
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const renderItem: ListRenderItem<Place> = useCallback(
-    ({ item }) => (
-      <PoiCard poi={item} onPress={() => handlePoiPress(item.id)} />
-    ),
-    [],
-  )
+  ({ item }) => (
+    <PoiCard poi={item} onPress={() => handlePoiPress(item)} />
+  ),
+  [],
+)
   return (
     <BottomSheet
       ref={bottomSheetRef}

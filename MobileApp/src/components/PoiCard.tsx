@@ -3,6 +3,8 @@ import React from "react"
 import { Avatar, Card, Chip, Text } from "react-native-paper"
 import { Place } from "../types/place"
 import { colors } from "../theme/colors"
+import SaveButton from './SaveButton';
+import { useAuth } from '../context/AuthContext';
 
 type Props = {
   poi: Place
@@ -10,6 +12,10 @@ type Props = {
 }
 
 const PoiCard = ({ poi, onPress }: Props) => {
+
+  const { user } = useAuth();
+  const isOwner = user?.uid === poi.createdBy;
+
   return (
     <Card onPress={onPress} style={styles.card}>
       <Card.Title
@@ -41,6 +47,11 @@ const PoiCard = ({ poi, onPress }: Props) => {
             </Chip>
           ))}
         </View>
+        {!isOwner && (
+          <View style={styles.saveButtonContainer}>
+            <SaveButton place={poi} />
+          </View>
+        )}
       </Card.Content>
     </Card>
   )
@@ -63,4 +74,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.tertiary,
     marginVertical: 2,
   },
+  saveButtonContainer: {
+  alignItems: 'flex-end',
+  marginTop: 8,
+},
 })

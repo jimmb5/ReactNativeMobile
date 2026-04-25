@@ -9,6 +9,7 @@ import { useSavedPlaces } from '../hooks/useSavedPlaces';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { Ionicons } from '@expo/vector-icons';
+import SaveButton from '../components/SaveButton';
 
 const PlaceDetailScreen = () => {
   const navigation = useNavigation();
@@ -83,16 +84,8 @@ return (
     <Text style={styles.deleteButtonText}>Poista paikka</Text>
   </TouchableOpacity>
 ) : (
-      <Pressable
-        style={({ pressed }) => [
-          styles.heartButton,
-          pressed && styles.heartButtonPressed,
-        ]}
-        onPress={handleSave}
-      >
-        <Ionicons name="heart" size={32} color="#0F8226" />
-      </Pressable>
-    )}
+  <SaveButton place={place} />
+)}
   </View>
 
   </SafeAreaView>
