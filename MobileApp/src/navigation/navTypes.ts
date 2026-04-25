@@ -1,3 +1,5 @@
+import { Place } from '../types/place';
+
 export type RootStackParamList = {
   Initialization: undefined;
   Login: undefined;
@@ -11,6 +13,9 @@ export type RootStackParamList = {
   LocationSelect: {
     onLocationSelected: (latitude: number, longitude: number) => void;
   };
+  PlaceDetail: {
+  place: Place;
+};
 };
 
 // tänne screenien määrittelyt. 

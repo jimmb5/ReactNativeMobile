@@ -11,6 +11,7 @@ import { ActivityIndicator } from "react-native"
 import { Text } from "react-native-paper"
 import { colors } from "../theme/colors"
 
+
 type Props = {
   places: Place[]
   isLoading: boolean

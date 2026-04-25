@@ -4,9 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMyPlaces } from '../hooks/useMyPlaces';
 import PoiCard from '../components/PoiCard';
 import { colors } from '../theme/colors';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/navTypes';
+
 
 const MyPlacesScreen = () => {
   const { places, loading, error } = useMyPlaces();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -24,13 +29,20 @@ const MyPlacesScreen = () => {
             )}
           </>
         }
-        renderItem={({ item }) => <PoiCard poi={item} onPress={() => {}} />}
+        renderItem={({ item }) => (
+        <PoiCard
+        poi={item}
+        onPress={() => navigation.navigate('PlaceDetail', { place: item })}
+     />
+     )}
       />
     </SafeAreaView>
   );
 };
 
+
 export default MyPlacesScreen;
+
 
 const styles = StyleSheet.create({
   safeArea: {

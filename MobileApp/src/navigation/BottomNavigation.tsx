@@ -12,6 +12,7 @@ import AddPlaceScreen from '../screens/AddPlaceScreen';
 import RoutesScreen from '../screens/RoutesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MyPlacesScreen from '../screens/MyPlacesScreen';
+import PlaceDetailScreen from '../screens/PlaceDetailScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -54,6 +55,8 @@ const StackNavigation = () => {
       <Stack.Screen name="AddPlace" component={AddPlaceScreen} />
       <Stack.Screen name="LocationSelect" component={LocationSelectScreen} />
       <Stack.Screen name="MyPlaces" component={MyPlacesScreen} />
+      <Stack.Screen name="PlaceDetail" component={PlaceDetailScreen} options={{ presentation: 'modal' }}
+/>
     </Stack.Navigator>
   );
 };

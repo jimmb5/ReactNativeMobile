@@ -18,6 +18,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 
 
+
 const ProfileScreen = () => {
   const { user, isGuest, signOut } = useAuth();
   const { places, loading, error } = useSavedPlacesData();
@@ -50,7 +51,7 @@ const ProfileScreen = () => {
               </Text>
               <Text style={styles.email}>{user?.email}</Text>
             </View>
-
+            
 <Pressable onPress={() => navigation.navigate('MyPlaces')}>
   <Text style={styles.sectionTitle}>Omat paikat →</Text>
 </Pressable>
@@ -72,7 +73,13 @@ const ProfileScreen = () => {
             )}
           </>
         }
-        renderItem={({ item }) => <PoiCard poi={item} onPress={() => {}} />}
+        renderItem={({ item }) => (
+        <PoiCard
+        poi={item}
+        onPress={() => navigation.navigate('PlaceDetail', { place: item })}
+        />
+        )}
+
         ListFooterComponent={
           <Pressable
             onPress={signOut}
