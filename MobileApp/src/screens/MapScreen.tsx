@@ -18,6 +18,11 @@ import BottomSheet from "@gorhom/bottom-sheet"
 import FilterSheet from "../components/FilterSheet"
 
 const MapScreen = () => {
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
+
   const {
     visiblePlaces,
     searchQuery,
@@ -29,7 +34,7 @@ const MapScreen = () => {
     setRouteLength,
     maxDistance,
     maxRouteLength,
-  } = usePlaceSearch()
+  } = usePlaceSearch(userLocation)
   const filterSheetRef = useRef<BottomSheet>(null)
 
   const navigation =
@@ -87,6 +92,11 @@ const MapScreen = () => {
       // Get current location
       const currentLocation = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
+      })
+
+      setUserLocation({
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
       })
 
       setLocation({

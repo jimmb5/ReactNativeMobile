@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet"
 import { Button, Chip, Divider, Text } from "react-native-paper"
 import Slider from "@react-native-community/slider"
 import { colors } from "../theme/colors"
+import { CATEGORIES } from "../data/categories"
 
 type Props = {
   bottomSheetRef: React.RefObject<BottomSheet | null>
@@ -15,17 +16,6 @@ type Props = {
   maxRouteLength: number
   onCloseButtonPress: () => void
 }
-
-const CATEGORIES = [
-  "Puisto",
-  "Leikkipuisto",
-  "Koirapuisto",
-  "Uimapaikka",
-  "Reitti",
-  "Nuotiopaikka",
-  "Laavu",
-  "Nähtävyys",
-]
 
 const FilterSheet = ({
   bottomSheetRef,
@@ -85,7 +75,7 @@ const FilterSheet = ({
         <Slider
           style={{ width: "100%", height: 40 }}
           minimumValue={1}
-          maximumValue={30}
+          maximumValue={100}
           step={1}
           value={maxDistance}
           onSlidingComplete={onDistanceChange}
