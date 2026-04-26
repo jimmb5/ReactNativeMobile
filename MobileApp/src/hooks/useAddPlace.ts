@@ -90,7 +90,20 @@ export const useAddPlace = () => {
         imageUrls,
         createdBy: user?.uid ?? "guest",
       })
+
+      const resetForm = () => {
+      setName('');
+      setDesc('');
+      setImages([]);
+      setType('');
+      setLocation(null);
+      setLength(0);
+      setTagInput('');
+      setTags([]);
+};
+
       console.log("Tallennettu ID:llä:", docRef.id)
+      resetForm();
       alert("Paikka lisätty!")
     } catch (error) {
       console.error("Virhe:", error)
