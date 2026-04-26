@@ -40,7 +40,7 @@ Sovellus toimii sekä Androidilla että iOSilla ongelmitta.
 ## Tekijät
 - Jimmy Bergbacka
 - Jouni Maunula
-- Veikka 
+- Veikka Pöyhtäri
 - Tuomas Ruuska
 - Iikka Laurila
 

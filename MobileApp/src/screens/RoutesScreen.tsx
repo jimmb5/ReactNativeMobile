@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
   View,
   StyleSheet,
@@ -6,25 +6,62 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native"
-import { pois, Poi } from "../data/pois"
+import { getAllPlaces } from "../../services/placeService"
+import { Place } from "../types/place"
 import { colors } from "../theme/colors"
 
+type GraphType = "palkki" | "pylväs" | "pisteet" | "tilasto"
+
 const RoutesScreen = () => {
-  const [graphType, setGraphType] = useState<
-    "bar" | "vertical" | "dots" | "stats"
-  >("bar")
+  const [graphType, setGraphType] = useState<GraphType>("palkki")
+  const [places, setPlaces] = useState<Place[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const routes: Poi[] = useMemo(
-    () => pois.filter((poi) => poi.type === "Reitti"),
-    []
-  )
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllPlaces()
+        setPlaces(data)
+      } catch (error) {
+        console.error("Error fetching places:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const maxLength = routes.length
-    ? Math.max(...routes.map((r) => r.length || 0))
-    : 1
+    fetchData()
+  }, [])
+
+  const routes = useMemo(() => {
+    return places.filter(
+      (p) => p.type?.toLowerCase() === "reitti"
+    )
+  }, [places])
+
+  const maxLength = useMemo(() => {
+    return routes.length
+      ? Math.max(...routes.map((r) => r.length || 0))
+      : 1
+  }, [routes])
 
   const screenWidth = Dimensions.get("window").width
   const maxBarWidth = screenWidth * 0.6
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <Text>Ladataan reittejä...</Text>
+      </View>
+    )
+  }
+
+  if (routes.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text>Ei reittejä löytynyt</Text>
+      </View>
+    )
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -32,76 +69,73 @@ const RoutesScreen = () => {
 
       {/* Buttons */}
       <View style={styles.buttonRow}>
-        <Text
-          style={[
-            styles.button,
-            graphType === "bar" && styles.buttonActive,
-          ]}
-          onPress={() => setGraphType("bar")}
-        >
-          Bar
-        </Text>
-
-        <Text
-          style={[
-            styles.button,
-            graphType === "vertical" && styles.buttonActive,
-          ]}
-          onPress={() => setGraphType("vertical")}
-        >
-          Vertical
-        </Text>
-
-        <Text
-          style={[
-            styles.button,
-            graphType === "dots" && styles.buttonActive,
-          ]}
-          onPress={() => setGraphType("dots")}
-        >
-          Dots
-        </Text>
-
-        <Text
-          style={[
-            styles.button,
-            graphType === "stats" && styles.buttonActive,
-          ]}
-          onPress={() => setGraphType("stats")}
-        >
-          Stats
-        </Text>
+        {[
+          { key: "palkki", label: "Palkki" },
+          { key: "pylväs", label: "Pylväs" },
+          { key: "pisteet", label: "Pisteet" },
+          { key: "tilasto", label: "Tilasto" },
+        ].map((item) => (
+          <Text
+            key={item.key}
+            style={[
+              styles.button,
+              graphType === item.key && styles.buttonActive,
+            ]}
+            onPress={() =>
+              setGraphType(item.key as GraphType)
+            }
+          >
+            {item.label}
+          </Text>
+        ))}
       </View>
 
       <View style={styles.chartContainer}>
-        {/* BAR */}
-        {graphType === "bar" &&
+        {/* PALKKI */}
+        {graphType === "palkki" &&
           routes.map((route) => {
+            const value = route.length || 0
             const width =
-              ((route.length || 0) / maxLength) * maxBarWidth
+              (value / maxLength) * maxBarWidth
 
             return (
               <View key={route.id} style={styles.barRow}>
-                <View style={[styles.bar, { width }]} />
-                <Text style={styles.label}>{route.name}</Text>
+                <View
+                  style={[styles.bar, { width }]}
+                />
+                <Text style={styles.label}>
+                  {route.name}
+                </Text>
                 <Text style={styles.value}>
-                  {route.length ? `${route.length} km` : "N/A"}
+                  {value ? `${value} km` : "N/A"}
                 </Text>
               </View>
             )
           })}
 
-        {/* VERTICAL */}
-        {graphType === "vertical" && (
+        {/* PYLVÄS */}
+        {graphType === "pylväs" && (
           <View style={styles.verticalWrapper}>
             {routes.map((route) => {
+              const value = route.length || 0
               const height =
-                ((route.length || 0) / maxLength) * 160
+                (value / maxLength) * 160
 
               return (
-                <View key={route.id} style={styles.verticalItem}>
-                  <View style={[styles.verticalBar, { height }]} />
-                  <Text style={styles.smallLabel} numberOfLines={1}>
+                <View
+                  key={route.id}
+                  style={styles.verticalItem}
+                >
+                  <View
+                    style={[
+                      styles.verticalBar,
+                      { height },
+                    ]}
+                  />
+                  <Text
+                    style={styles.smallLabel}
+                    numberOfLines={1}
+                  >
                     {route.name}
                   </Text>
                 </View>
@@ -110,32 +144,44 @@ const RoutesScreen = () => {
           </View>
         )}
 
-        {/* DOTS */}
-        {graphType === "dots" &&
+        {/* PISTEET */}
+        {graphType === "pisteet" &&
           routes.map((route) => {
+            const value = route.length || 0
             const count = Math.round(
-              ((route.length || 0) / maxLength) * 10
+              (value / maxLength) * 10
             )
 
             return (
-              <Text key={route.id} style={styles.dotRow}>
+              <Text
+                key={route.id}
+                style={styles.dotRow}
+              >
                 {route.name}: {"●".repeat(count)}
               </Text>
             )
           })}
 
-        {/* CLEAN STATS (NO PERCENTAGES) */}
-        {graphType === "stats" &&
+        {/* TILASTO */}
+        {graphType === "tilasto" &&
           routes
             .slice()
-            .sort((a, b) => (b.length || 0) - (a.length || 0))
+            .sort(
+              (a, b) =>
+                (b.length || 0) - (a.length || 0)
+            )
             .map((route, index) => {
               const value = route.length || 0
 
               return (
-                <View key={route.id} style={styles.card}>
+                <View
+                  key={route.id}
+                  style={styles.card}
+                >
                   <View style={styles.cardTop}>
-                    <Text style={styles.rank}>#{index + 1}</Text>
+                    <Text style={styles.rank}>
+                      #{index + 1}
+                    </Text>
                     <Text style={styles.cardTitle}>
                       {route.name}
                     </Text>
@@ -144,13 +190,16 @@ const RoutesScreen = () => {
                     </Text>
                   </View>
 
-                  <View style={styles.simpleBarBg}>
+                  <View
+                    style={styles.simpleBarBg}
+                  >
                     <View
                       style={[
                         styles.simpleBarFill,
                         {
                           width:
-                            (value / maxLength) * maxBarWidth,
+                            (value / maxLength) *
+                            maxBarWidth,
                         },
                       ]}
                     />
@@ -173,6 +222,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   title: {
     fontSize: 22,
     fontWeight: "bold",
@@ -190,7 +245,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#ccc",
     borderRadius: 6,
-    fontSize: 12,
   },
 
   buttonActive: {
@@ -202,7 +256,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  /* BAR */
   barRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -227,7 +280,6 @@ const styles = StyleSheet.create({
     color: colors.gray,
   },
 
-  /* VERTICAL */
   verticalWrapper: {
     flexDirection: "row",
     alignItems: "flex-end",
@@ -252,13 +304,11 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
 
-  /* DOTS */
   dotRow: {
     marginBottom: 10,
     fontSize: 14,
   },
 
-  /* STATS (clean version) */
   card: {
     backgroundColor: "#fff",
     padding: 12,
