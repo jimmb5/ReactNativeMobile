@@ -32,7 +32,7 @@ const PoiCard = ({ poi, onPress }: Props) => {
       />
       <Card.Content>
         {poi.type === "Reitti" ? (
-          <Text variant="bodySmall">Pituus: {poi.length} km</Text>
+          <Text variant="bodySmall">Pituus: {poi.length} m</Text>
         ) : null}
         <Text variant="bodySmall">
           {typeof poi.distance === "number"
