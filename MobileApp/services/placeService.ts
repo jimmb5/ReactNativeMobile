@@ -19,11 +19,16 @@ export const getAllPlaces = async (): Promise<Place[]> => {
   }
 }
 
+export const getPlacesByIds = async (ids: string[]): Promise<Place[]> => {
+  if (ids.length === 0) return []
+  const allPlaces = await getAllPlaces()
+  const idSet = new Set(ids)
+  return allPlaces.filter((place) => idSet.has(place.id))
+}
+
 export const getSavedPlaces = async (uid: string): Promise<Place[]> => {
   const savedRef = collection(db, "users", uid, "savedPlaces")
   const snapshot = await getDocs(savedRef)
   const savedIds = snapshot.docs.map((doc) => doc.data().placeId as string)
-
-  const allPlaces = await getAllPlaces()
-  return allPlaces.filter((place) => savedIds.includes(place.id))
+  return getPlacesByIds(savedIds)
 }

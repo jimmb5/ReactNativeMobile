@@ -20,31 +20,12 @@ import { RootStackParamList } from '../navigation/navTypes';
 
 
 const ProfileScreen = () => {
-  const { user, isGuest, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const { places, loading, error } = useSavedPlacesData();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  if (isGuest && !user) {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.guestContainer}>
-          <Text style={styles.guestTitle}>Ei käyttäjää</Text>
-          <Text style={styles.guestText}>
-            Kirjaudu sisään nähdäksesi profiilisi ja tallennetut paikat.
-          </Text>
-          <Pressable
-            onPress={signOut}
-            style={({ pressed }) => [
-              styles.signInButton,
-              pressed && styles.signInButtonPressed,
-            ]}
-          >
-            <Text style={styles.signInText}>Kirjaudu sisään</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const isGuestView = !user;
+  const footerLabel = isGuestView ? 'Kirjaudu sisään' : 'Kirjaudu ulos';
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -55,15 +36,28 @@ const ProfileScreen = () => {
         ListHeaderComponent={
           <>
             <View style={styles.profileHeader}>
-              <Text style={styles.displayName}>
-                {user?.displayName ?? 'Käyttäjä'}
-              </Text>
-              <Text style={styles.email}>{user?.email}</Text>
+              {isGuestView ? (
+                <>
+                  <Text style={styles.displayName}>Vierailija</Text>
+                  <Text style={styles.email}>
+                    Kirjaudu sisään tallentaaksesi paikat tilillesi.
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.displayName}>
+                    {user?.displayName ?? 'Käyttäjä'}
+                  </Text>
+                  <Text style={styles.email}>{user?.email}</Text>
+                </>
+              )}
             </View>
-            
-<Pressable onPress={() => navigation.navigate('MyPlaces')}>
-  <Text style={styles.sectionTitle}>Omat paikat →</Text>
-</Pressable>
+
+            {!isGuestView && (
+              <Pressable onPress={() => navigation.navigate('MyPlaces')}>
+                <Text style={styles.sectionTitle}>Omat paikat →</Text>
+              </Pressable>
+            )}
             <Text style={styles.sectionTitle}>Tallennetut paikat</Text>
 
             {loading && (
@@ -83,21 +77,25 @@ const ProfileScreen = () => {
           </>
         }
         renderItem={({ item }) => (
-        <PoiCard
-        poi={item}
-        onPress={() => navigation.navigate('PlaceDetail', { place: item })}
-        />
+          <PoiCard
+            poi={item}
+            onPress={() => navigation.navigate('PlaceDetail', { place: item })}
+          />
         )}
-
         ListFooterComponent={
           <Pressable
             onPress={signOut}
             style={({ pressed }) => [
-              styles.signOutButton,
-              pressed && styles.signOutButtonPressed,
+              isGuestView ? styles.signInButton : styles.signOutButton,
+              pressed &&
+                (isGuestView
+                  ? styles.signInButtonPressed
+                  : styles.signOutButtonPressed),
             ]}
           >
-            <Text style={styles.signOutText}>Kirjaudu ulos</Text>
+            <Text style={isGuestView ? styles.signInText : styles.signOutText}>
+              {footerLabel}
+            </Text>
           </Pressable>
         }
       />
