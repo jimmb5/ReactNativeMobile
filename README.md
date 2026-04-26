@@ -38,10 +38,10 @@ Pulu on paikkojen löytämiseen keskittyvä mobiilisovellus, jossa käyttäjät 
 Sovellus toimii sekä Androidilla että iOSilla ongelmitta.
 
 ## Tekijät
-Jimmy Bergbacka
-Jouni Maunula
-Veikka 
-Tuomas Ruuska
-Iikka Laurila
+- Jimmy Bergbacka
+- Jouni Maunula
+- Veikka 
+- Tuomas Ruuska
+- Iikka Laurila
 
-Mobiilisovellusprojekti 
+-Mobiilisovellusprojekti, OAMK. 2. Vuosikurssi. 
