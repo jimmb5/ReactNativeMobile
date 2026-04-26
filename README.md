@@ -1,8 +1,12 @@
-![Pulu logo](MobileApp/assets/PuluLogo.png)
+<p align="center">
+  <img src="MobileApp/assets/PuluLogo.png" alt="Pulu logo" width="120">
+</p>
 
-# Pulu
+<h1 align="center">Pulu</h1>
 
-Löydä lähistöltäsi piilotettuja helmiä – yksi swipe kerrallaan.
+<p align="center">
+  Löydä lähistöltäsi piilotettuja helmiä – yksi swipe kerrallaan.
+</p>
 
 ---
 
