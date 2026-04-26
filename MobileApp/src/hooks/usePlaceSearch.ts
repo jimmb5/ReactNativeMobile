@@ -13,8 +13,8 @@ export const usePlaceSearch = (
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [maxDistance, setMaxDistance] = useState<number>(15)
-  const [maxRouteLength, setMaxRouteLength] = useState<number>(15)
+  const [maxDistance, setMaxDistance] = useState<number>(1000)
+  const [maxRouteLength, setMaxRouteLength] = useState<number>(30)
 
   useEffect(() => {
     loadPlaces()

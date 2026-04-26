@@ -75,7 +75,7 @@ const FilterSheet = ({
         <Slider
           style={{ width: "100%", height: 40 }}
           minimumValue={1}
-          maximumValue={100}
+          maximumValue={1000}
           step={1}
           value={maxDistance}
           onSlidingComplete={onDistanceChange}

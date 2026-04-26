@@ -39,16 +39,15 @@ const MapScreen = () => {
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  const [location, setLocation] = useState<Region>({
+  const initialRegion: Region = {
     latitude: 65.08,
     longitude: 25.48,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  })
+    latitudeDelta: 3,
+    longitudeDelta: 3,
+  }
 
   useEffect(() => {
     getCurrentLocation()
-    startCompassTracking()
   }, [])
 
   const openFilterSheet = () => {
@@ -56,25 +55,6 @@ const MapScreen = () => {
   }
   const closeFilterSheet = () => {
     filterSheetRef.current?.close()
-  }
-
-  const [heading, setHeading] = useState<number>(0)
-
-  const startCompassTracking = async (): Promise<void> => {
-    try {
-      //Check if device has compass
-      const hasCompass = await Location.hasServicesEnabledAsync()
-      if (!hasCompass) {
-        console.log("Compass not availabel")
-        return
-      }
-      // Watch heading change
-      const subscription = await Location.watchHeadingAsync((headingData) => {
-        setHeading(headingData.trueHeading || headingData.magHeading)
-      })
-    } catch (error) {
-      console.error("compass error:", error)
-    }
   }
 
   const getCurrentLocation = async (): Promise<void> => {
@@ -98,13 +78,6 @@ const MapScreen = () => {
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
       })
-
-      setLocation({
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      })
     } catch (error) {
       console.error(error)
     }
@@ -113,7 +86,12 @@ const MapScreen = () => {
   return (
     <View style={styles.container}>
       <Text>MapScreen</Text>
-      <Map region={location} heading={heading} />
+      <Map
+        initialRegion={initialRegion}
+        userLocation={userLocation}
+        places={visiblePlaces}
+        onMarkerPress={(place) => navigation.navigate("PlaceDetail", { place })}
+      />
       <StatusBar style="auto" />
       <View style={styles.content}>
         <SearchBar
