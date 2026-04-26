@@ -5,13 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/navTypes';
 import { useRegister } from '../hooks/useRegister';
+import { useAuth } from '../context/AuthContext';
 import { colors } from '../theme/colors';
-
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 const RegisterScreen = () => {
   const navigation = useNavigation<Navigation>();
   const { username, setUsername, email, setEmail, password, setPassword, loading, error, register } = useRegister();
+  const { continueAsGuest } = useAuth();
 
   function handleRegister() {
     register();
@@ -77,24 +78,22 @@ const RegisterScreen = () => {
           </Pressable>
         </View>
 
-        <View style={styles.socialContainer}>
-          <Text style={styles.socialText}>Tai rekisteröidy käyttämällä</Text>
-
-          <View style={styles.socialButtonsRow}>
-            <Pressable
-              style={({ pressed }) => [styles.socialButton, pressed && styles.socialButtonPressed]}
-            >
-              <Image source={require('../../assets/google.png')} style={styles.socialLogo} resizeMode="contain" />
-              <Text style={styles.socialButtonLabel}>Google</Text>
-            </Pressable>
-
-            <Pressable
-              style={({ pressed }) => [styles.socialButton, pressed && styles.socialButtonPressed]}
-            >
-              <Image source={require('../../assets/facebook.png')} style={styles.socialLogo} resizeMode="contain" />
-              <Text style={styles.socialButtonLabel}>Facebook</Text>
-            </Pressable>
+        <View style={styles.guestContainer}>
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>Tai</Text>
+            <View style={styles.dividerLine} />
           </View>
+
+          <Pressable
+            onPress={continueAsGuest}
+            style={({ pressed }) => [
+              styles.guestButton,
+              pressed && styles.guestButtonPressed,
+            ]}
+          >
+            <Text style={styles.guestButtonText}>Jatka vierailijana</Text>
+          </Pressable>
         </View>
 
         <View style={styles.footerContainer}>
@@ -196,41 +195,58 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     letterSpacing: 0.1,
   },
-  socialContainer: {
-    marginTop: 40,
+  guestContainer: {
+    marginTop: 32,
     alignItems: 'center',
-  },
-  socialText: {
-    color: '#000000',
-    fontSize: 14,
-    marginBottom: 20,
-  },
-  socialButtonsRow: {
-    flexDirection: 'row',
     gap: 16,
   },
-  socialButton: {
+  divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.grayLight,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    gap: 10,
+    width: '100%',
+    gap: 12,
   },
-  socialButtonPressed: {
-    opacity: 0.85,
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.grayLight,
   },
-  socialLogo: {
-    width: 22,
-    height: 22,
-  },
-  socialButtonLabel: {
+  dividerText: {
     fontSize: 14,
-    fontWeight: '500',
+    color: colors.gray,
+  },
+  guestButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    width: '100%',
+    height: 56,
+    borderRadius: 4,
+    backgroundColor: colors.secondary,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  guestButtonPressed: {
+    opacity: 0.8,
+    ...Platform.select({
+      android: { elevation: 1 },
+    }),
+  },
+  guestButtonText: {
     color: colors.black,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.1,
   },
   footerContainer: {
     marginTop: 'auto',
