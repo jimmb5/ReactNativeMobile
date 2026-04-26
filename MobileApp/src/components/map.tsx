@@ -1,50 +1,70 @@
-import React, { useState } from "react"
-import { StyleSheet, Text, TouchableOpacity } from "react-native"
+import React, { useEffect, useRef } from "react"
+import { StyleSheet } from "react-native"
 import MapView, { Marker, Region } from "react-native-maps"
+import { Place } from "../types/place"
 
 interface MapProps {
-  region: Region
-  heading?: number
+  initialRegion: Region
+  userLocation?: { latitude: number; longitude: number } | null
+  places?: Place[]
+  onMarkerPress?: (place: Place) => void
 }
 
-const Map = ({ region, heading }: MapProps) => {
+const Map = ({
+  initialRegion,
+  userLocation,
+  places = [],
+  onMarkerPress,
+}: MapProps) => {
+  const mapRef = useRef<MapView>(null)
+  const hasCenteredOnUser = useRef(false)
+
+  useEffect(() => {
+    if (userLocation && mapRef.current && !hasCenteredOnUser.current) {
+      hasCenteredOnUser.current = true
+      mapRef.current.animateToRegion(
+        {
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          latitudeDelta: 0.15,
+          longitudeDelta: 0.15,
+        },
+        800,
+      )
+    }
+  }, [userLocation])
+
   return (
     <MapView
+      ref={mapRef}
       style={StyleSheet.absoluteFillObject}
-      region={region}
-      camera={
-        heading !== undefined
-          ? {
-              center: {
-                latitude: region.latitude,
-                longitude: region.longitude,
-              },
-              pitch: 0,
-              heading: heading,
-              zoom: 15,
-            }
-          : undefined
-      }
+      initialRegion={initialRegion}
+      showsUserLocation
+      rotateEnabled={false}
     >
-      <Marker
-        coordinate={{
-          latitude: region.latitude,
-          longitude: region.longitude,
-        }}
-        title="Your Location"
-        description="You are here"
-        pinColor="red"
-      />
+      {userLocation && (
+        <Marker
+          coordinate={userLocation}
+          title="Olet tässä"
+          pinColor="green"
+        />
+      )}
+      {places.map((place) => {
+        const lat = place.location?.latitude
+        const lon = place.location?.longitude
+        if (lat == null || lon == null) return null
+        return (
+          <Marker
+            key={place.id}
+            coordinate={{ latitude: lat, longitude: lon }}
+            title={place.name}
+            description={place.type}
+            onPress={() => onMarkerPress?.(place)}
+          />
+        )
+      })}
     </MapView>
   )
 }
-
-const styles = StyleSheet.create({
-  map: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-})
 
 export default Map
