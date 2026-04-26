@@ -27,8 +27,6 @@ const FilterSheet = ({
   maxRouteLength,
   onCloseButtonPress,
 }: Props) => {
-  const snapPoints = ["96%"]
-
   const handleSheetChanges = useCallback((index: number) => {
     console.log("handleSheetChanges", index)
   }, [])
@@ -37,8 +35,8 @@ const FilterSheet = ({
     <BottomSheet
       ref={bottomSheetRef}
       onChange={handleSheetChanges}
-      snapPoints={snapPoints}
       index={-1}
+      enableDynamicSizing={true}
       enablePanDownToClose={true}
       enableContentPanningGesture={false}
       style={styles.container}
@@ -112,8 +110,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    flex: 1,
     padding: 16,
+    paddingBottom: 32,
   },
   typesContainer: {
     flexDirection: "row",
