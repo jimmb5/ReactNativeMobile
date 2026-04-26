@@ -51,7 +51,7 @@ const MapScreen = () => {
   }, [])
 
   const openFilterSheet = () => {
-    filterSheetRef.current?.snapToIndex(1)
+    filterSheetRef.current?.expand()
   }
   const closeFilterSheet = () => {
     filterSheetRef.current?.close()
