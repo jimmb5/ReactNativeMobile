@@ -2,7 +2,6 @@ import { Text, View, TouchableOpacity } from "react-native"
 import React, { useRef } from "react"
 import { colors } from "../theme/colors"
 import { useEffect, useState } from "react"
-import { SafeAreaView } from "react-native-safe-area-context"
 import SearchBar from "../components/SearchBar"
 import ListSheet from "../components/ListSheet"
 import Map from "../components/map"
@@ -34,6 +33,7 @@ const MapScreen = () => {
     setRouteLength,
     maxDistance,
     maxRouteLength,
+    reloadPlaces,
   } = usePlaceSearch(userLocation)
   const filterSheetRef = useRef<BottomSheet>(null)
 
@@ -49,6 +49,15 @@ const MapScreen = () => {
   useEffect(() => {
     getCurrentLocation()
   }, [])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      reloadPlaces()
+      console.log("Reload places")
+    })
+
+    return unsubscribe
+  }, [navigation])
 
   const openFilterSheet = () => {
     filterSheetRef.current?.expand()
