@@ -32,6 +32,15 @@ const ProfileScreen = () => {
           <Text style={styles.guestText}>
             Kirjaudu sisään nähdäksesi profiilisi ja tallennetut paikat.
           </Text>
+          <Pressable
+            onPress={signOut}
+            style={({ pressed }) => [
+              styles.signInButton,
+              pressed && styles.signInButtonPressed,
+            ]}
+          >
+            <Text style={styles.signInText}>Kirjaudu sisään</Text>
+          </Pressable>
         </View>
       </SafeAreaView>
     );
@@ -195,5 +204,37 @@ const styles = StyleSheet.create({
     color: colors.gray,
     textAlign: 'center',
     lineHeight: 24,
+  },
+  signInButton: {
+    width: '100%',
+    height: 56,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    marginTop: 8,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  signInButtonPressed: {
+    opacity: 0.8,
+    ...Platform.select({
+      android: { elevation: 1 },
+    }),
+  },
+  signInText: {
+    color: colors.black,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.1,
   },
 });
