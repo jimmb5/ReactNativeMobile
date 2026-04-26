@@ -40,10 +40,26 @@ const BottomNavigation = () => {
         },
       })}
     >
-      <Tab.Screen name="Explore" component={ExploreScreen} />
-      <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Routes" component={RoutesScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Explore"
+        component={ExploreScreen}
+        options={{ tabBarLabel: 'Tutustu' }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{ tabBarLabel: 'Kartta' }}
+      />
+      <Tab.Screen
+        name="Routes"
+        component={RoutesScreen}
+        options={{ tabBarLabel: 'Reitit' }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ tabBarLabel: 'Profiili' }}
+      />
     </Tab.Navigator>
   );
 };
