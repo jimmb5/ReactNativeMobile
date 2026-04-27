@@ -141,8 +141,8 @@ const AddPlaceScreen = () => {
         <Slider
           style={styles.slider}
           minimumValue={0}
-          maximumValue={5000}
-          step={50}
+          maximumValue={100}
+          step={1}
           value={length}
           onValueChange={setLength}
           minimumTrackTintColor={colors.primary}
