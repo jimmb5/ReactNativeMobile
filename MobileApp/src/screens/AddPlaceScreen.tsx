@@ -135,8 +135,8 @@ const AddPlaceScreen = () => {
           {length === 0
             ? "Ei reittiä"
             : length === 5000
-              ? "5000 m +"
-              : `${length} m`}
+              ? "5000 km +"
+              : `${length} km`}
         </Text>
         <Slider
           style={styles.slider}
