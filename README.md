@@ -45,3 +45,5 @@ Sovellus toimii sekä Androidilla että iOSilla ongelmitta.
 - Iikka Laurila
 
 -Mobiilisovellusprojekti, OAMK. 2. Vuosikurssi. 
+
+Työtunnit: https://unioulu-my.sharepoint.com/:x:/g/personal/jbergbac24_students_oamk_fi/IQDnjtVKaVpjT4ajqCbhmatlAX862ElPcgRjLssOYItjSug?e=o8WNrv
